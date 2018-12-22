@@ -164,7 +164,7 @@ abstract class AbstractController
      */
     public function getLanguageCode()
     {
-        $manager_language = $this->modx->config['manager_language'];
+        $manager_language = $this->modx->getConfig('manager_language');
         if (file_exists(MODX_MANAGER_PATH . "includes/lang/" . $manager_language . ".inc.php")) {
             include_once MODX_MANAGER_PATH . "includes/lang/" . $manager_language . ".inc.php";
         }

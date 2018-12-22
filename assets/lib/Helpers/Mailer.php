@@ -232,8 +232,8 @@ class Mailer
     protected function applyMailConfig()
     {
         $this->mail->IsHTML($this->getCFGDef('isHtml', 1));
-        $this->mail->From = $this->getCFGDef('from', $this->modx->config['emailsender']);
-        $this->mail->FromName = $this->getCFGDef('fromName', $this->modx->config['site_name']);
+        $this->mail->From = $this->getCFGDef('from', $this->modx->getConfig('emailsender'));
+        $this->mail->FromName = $this->getCFGDef('fromName', $this->modx->getConfig('site_name'));
         $this->mail->Subject = $this->getCFGDef('subject');
         $this->addAddressToMailer("replyTo", $this->getCFGDef('replyTo'));
         $this->addAddressToMailer("to", $this->getCFGDef('to'));

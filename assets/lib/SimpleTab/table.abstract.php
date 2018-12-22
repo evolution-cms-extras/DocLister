@@ -72,7 +72,7 @@ class dataTable extends \autoTable
      */
     public function touch($field)
     {
-        $this->set($field, date('Y-m-d H:i:s', time() + $this->modx->config['server_offset_time']));
+        $this->set($field, date('Y-m-d H:i:s', time() + $this->modx->getConfig('server_offset_time')));
 
         return $this;
     }
@@ -273,7 +273,7 @@ class dataTable extends \autoTable
         $inputFile = MODX_BASE_PATH . $this->fs->relativePath($url);
         $outputFile = MODX_BASE_PATH . $this->fs->relativePath($folder) . '/' . $this->fs->relativePath($url);
         $dir = $this->fs->takeFileDir($outputFile);
-        $this->fs->makeDir($dir, $this->modx->config['new_folder_permissions']);
+        $this->fs->makeDir($dir, $this->modx->getConfig('new_folder_permissions'));
         if ($thumb->create($inputFile, $outputFile, $options)) {
             return true;
         } else {

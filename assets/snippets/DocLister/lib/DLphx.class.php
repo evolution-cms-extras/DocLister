@@ -58,7 +58,7 @@ class DLphx
 
         $this->modx->setPlaceholder("phx", "&_PHX_INTERNAL_&");
         if (function_exists('mb_internal_encoding')) {
-            mb_internal_encoding($this->modx->config['modx_charset']);
+            mb_internal_encoding($this->modx->getConfig('modx_charset'));
         }
     }
 
@@ -365,10 +365,10 @@ class DLphx
                         break;
                     case "htmlent":
                     case "htmlentities":
-                        $output = htmlentities($output, ENT_QUOTES, $this->modx->config['modx_charset']);
+                        $output = htmlentities($output, ENT_QUOTES, $this->modx->getConfig('modx_charset'));
                         break;
                     case "html_entity_decode":
-                        $output = html_entity_decode($output, ENT_QUOTES, $this->modx->config['modx_charset']);
+                        $output = html_entity_decode($output, ENT_QUOTES, $this->modx->getConfig('modx_charset'));
                         break;
                     case "esc":
                         $output = preg_replace("/&amp;(#[0-9]+|[a-z]+);/i", "&$1;", APIHelpers::e($output));
@@ -479,8 +479,8 @@ class DLphx
                                 $this->Log("  |--- DB -> Custom Modifier");
                             } else {
                                 if ($this->modx->db->getRecordCount($result) == 0) {
-// If snippet not found, look in the modifiers folder
-                                    $filename = $this->modx->config['rb_base_dir'] . 'plugins/phx/modifiers/' . $modifier_cmd[$i] . '.phx.php';
+                                    // If snippet not found, look in the modifiers folder
+                                    $filename = $this->modx->getConfig('rb_base_dir') . 'plugins/phx/modifiers/' . $modifier_cmd[$i] . '.phx.php';
                                     if (@file_exists($filename)) {
                                         $file_contents = @file_get_contents($filename);
                                         $file_contents = str_replace('<' . '?php', '', $file_contents);
@@ -607,7 +607,7 @@ class DLphx
 
     // Returns the specified field from the user record
     // positive userid = manager, negative integer = webuser
-    
+
 /**
      * @param $userid
      * @param $field

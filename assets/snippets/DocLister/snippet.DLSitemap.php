@@ -56,7 +56,7 @@ if (!class_exists("DLSitemap")) {
 
 $out = $modx->runSnippet('DocLister', $params);
 if (!empty($out)) {
-    $out = "<?xml version=\"1.0\" encoding=\"{$modx->config['modx_charset']}\"?>\n<urlset xmlns=\"{$schema}\">{$out}\n</urlset>";
+    $out = "<?xml version=\"1.0\" encoding=\"{$modx->getConfig('modx_charset')}\"?>\n<urlset xmlns=\"{$schema}\">{$out}\n</urlset>";
 }
 
 return $out;

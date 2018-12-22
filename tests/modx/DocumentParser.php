@@ -95,4 +95,13 @@ class DocumentParser
         }
         return $out;
     }
+
+    public function getConfig($name = '')
+    {
+        if (!empty ($this->config[$name])) {
+            return $this->config[$name];
+        }
+
+        return false;
+    }
 }

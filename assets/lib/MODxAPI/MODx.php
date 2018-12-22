@@ -362,7 +362,7 @@ abstract class MODxAPI extends MODxAPIhelpers
             if (is_scalar($custom)) {
                 $custom = array($custom);
             }
-            switch ($this->modx->config['cache_type']) {
+            switch ($this->modx->getConfig('cache_type')) {
                 case 2:
                     $cacheFile = "_*.pageCache.php";
                     break;

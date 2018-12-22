@@ -91,7 +91,7 @@ class shopkeeperDocLister extends site_contentDocLister
                         }
                     }
 
-                    $item['date'] = $item['createdon'] + $this->modx->config['server_offset_time'];
+                    $item['date'] = $item['createdon'] + $this->modx->getConfig('server_offset_time');
                     if ($this->getCFGDef('dateFormat', '%d.%b.%y %H:%M') != '') {
                         $item['date'] = strftime($this->getCFGDef('dateFormat', '%d.%b.%y %H:%M'), $item['date']);
                     }

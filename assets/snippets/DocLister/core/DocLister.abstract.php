@@ -577,8 +577,8 @@ abstract class DocLister
         $id = ((int)$id > 0) ? (int)$id : $this->getCurrentMODXPageID();
 
         $link = $this->checkExtender('request') ? $this->extender['request']->getLink() : $this->getRequest();
-        if ($id == $this->modx->config['site_start']) {
-            $url = $this->modx->config['site_url'] . ($link != '' ? "?{$link}" : "");
+        if ($id == $this->modx->getConfig('site_start')) {
+            $url = $this->modx->getConfig('site_url') . ($link != '' ? "?{$link}" : "");
         } else {
             $url = $this->modx->makeUrl($id, '', $link, $this->getCFGDef('urlScheme', ''));
         }
@@ -787,7 +787,7 @@ abstract class DocLister
     public function getCustomLang($lang = '')
     {
         if (empty($lang)) {
-            $lang = $this->getCFGDef('lang', $this->modx->config['manager_language']);
+            $lang = $this->getCFGDef('lang', $this->modx->getConfig('manager_language'));
         }
         if (file_exists(dirname(dirname(__FILE__)) . "/lang/" . $lang . ".php")) {
             $tmp = include(dirname(__FILE__) . "/lang/" . $lang . ".php");
@@ -808,7 +808,7 @@ abstract class DocLister
     public function loadLang($name = 'core', $lang = '', $rename = true)
     {
         if (empty($lang)) {
-            $lang = $this->getCFGDef('lang', $this->modx->config['manager_language']);
+            $lang = $this->getCFGDef('lang', $this->modx->getConfig('manager_language'));
         }
 
         $this->debug->debug(
