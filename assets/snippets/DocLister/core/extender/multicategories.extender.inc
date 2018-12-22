@@ -23,9 +23,9 @@ class multicategories_DL_Extender extends extDocLister
                 if ($docs) {
                     $docs = implode(',', $docs);
                     $documents = $this->DocLister->getCFGDef('documents', '');
-                    $this->DocLister->config->setConfig(array(
+                    $this->DocLister->config->setConfig([
                         "documents" => $documents . ',' . $docs
-                    ));
+                    ]);
                 }
             }
         };

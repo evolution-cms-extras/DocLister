@@ -3,7 +3,7 @@ if ( ! defined('MODX_BASE_PATH')) {
     die('What are you doing? Get out of here!');
 }
 
-$_lang = array(
+$_lang = [
     /** Именительный падеж */
     '1'  => 'Январь',
     '2'  => 'Февраль',
@@ -17,5 +17,5 @@ $_lang = array(
     '10' => 'Октябрь',
     '11' => 'Ноябрь',
     '12' => 'Декабрь'
-);
+];
 return $_lang;

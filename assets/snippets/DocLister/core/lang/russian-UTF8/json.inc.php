@@ -3,7 +3,7 @@ if ( ! defined('MODX_BASE_PATH')) {
     die('What are you doing? Get out of here!');
 }
 
-$_lang = array();
+$_lang = [];
 $_lang['error_none'] = 'При разборе JSON строки ошибок не обнаружено';
 $_lang['error_depth'] = 'При разборе JSON строки достигнута максимальная глубина стека';
 $_lang['error_state_mismatch'] = 'Некорректные разряды или не совпадение режимов при разборе JSON строки';

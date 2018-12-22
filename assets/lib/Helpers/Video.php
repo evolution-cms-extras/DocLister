@@ -45,27 +45,27 @@ class Video
     const RUTUBE = 'rutube';
 
     /** Регулярки для определения видеохостинга и идентификатора ролика */
-    protected $regexp = array(
-        self::YOUTUBE => array( //Не используются
+    protected $regexp = [
+        self::YOUTUBE => [ //Не используются
             '/[http|https]+:\/\/(?:www\.|)youtube\.com\/watch\?(?:.*)?v=([a-zA-Z0-9_\-]+)/i',
             '/[http|https]+:\/\/(?:www\.|)youtube\.com\/embed\/([a-zA-Z0-9_\-]+)/i',
             '/[http|https]+:\/\/(?:www\.|)youtu\.be\/([a-zA-Z0-9_\-]+)/i'
-        ),
-        self::VIMEO   => array( //Не используются
+        ],
+        self::VIMEO   => [ //Не используются
             '/[http|https]+:\/\/(?:www\.|)vimeo\.com\/([a-zA-Z0-9_\-]+)(&.+)?/i',
             '/[http|https]+:\/\/player\.vimeo\.com\/video\/([a-zA-Z0-9_\-]+)(&.+)?/i'
-        ),
-        self::RUTUBE  => array(
+        ],
+        self::RUTUBE  => [
             '/[http|https]+:\/\/(?:www\.|)rutube\.ru\/video\/embed\/([a-zA-Z0-9_\-]+)/i',
             '/[http|https]+:\/\/(?:www\.|)rutube\.ru\/tracks\/([a-zA-Z0-9_\-]+)(&.+)?/i'
-        )
-    );
+        ]
+    ];
 
     /** Ссылка на RUtube без идентификатора в адресе */
     protected $regexp_rutube_extra = '/[http|https]+:\/\/(?:www\.|)rutube\.ru\/video\/([a-zA-Z0-9_\-]+)\//i';
 
     /** Варианты ссылок, которые поддерживаются */
-    protected static $test = array(
+    protected static $test = [
         'http://youtube.com/watch?v=ShPq2Dmy6X8',
         'http://www.youtube.com/watch?v=6dwqZw0j_jY&feature=youtu.be',
         'http://www.youtube.com/watch?v=cKZDdG9FTKY&feature=channel',
@@ -80,7 +80,7 @@ class Video
         'http://rutube.ru/video/dec0a58c8cb4d226abc7b1030bbb63b9/?ref=top',
         'rutube.ru/tracks/6032725.html',
         'http://www.rutube.ru/video/embed/6032725',
-    );
+    ];
 
     protected $info = false;
 

@@ -28,14 +28,14 @@ abstract class DocLister
      * @var array
      * @access protected
      */
-    protected $_docs = array();
+    protected $_docs = [];
 
     /**
      * Массив документов self::$_docs собранный в виде дерева
      * @var array
      * @access protected
      */
-    protected $_tree = array();
+    protected $_tree = [];
 
     /**
      * @var
@@ -62,35 +62,35 @@ abstract class DocLister
      * @var array
      * @access protected
      */
-    protected $extender = array();
+    protected $extender = [];
 
     /**
      * Массив плейсхолдеров доступных в шаблоне
      * @var array
      * @access protected
      */
-    protected $_plh = array();
+    protected $_plh = [];
 
     /**
      * Языковой пакет
      * @var array
      * @access protected
      */
-    protected $_lang = array();
+    protected $_lang = [];
 
     /**
      * Пользовательский языковой пакет
      * @var array
      * @access protected
      */
-    protected $_customLang = array();
+    protected $_customLang = [];
 
     /**
      * Список таблиц уже с префиксами MODX
      * @var array
      * @access private
      */
-    private $_table = array();
+    private $_table = [];
 
     /**
      * PrimaryKey основной таблицы
@@ -111,14 +111,14 @@ abstract class DocLister
      * @var array
      * @access protected
      */
-    protected $_filters = array('where' => '', 'join' => '');
+    protected $_filters = ['where' => '', 'join' => ''];
 
     /**
      * Список доступных логических операторов для фильтрации
      * @var array
      * @access protected
      */
-    protected $_logic_ops = array('AND' => ' AND ', 'OR' => ' OR '); // logic operators currently supported
+    protected $_logic_ops = ['AND' => ' AND ', 'OR' => ' OR ']; // logic operators currently supported
 
     /**
      * Режим отладки
@@ -139,7 +139,7 @@ abstract class DocLister
      * Массив дополнительно подключаемых таблиц с псевдонимами
      * @var array
      */
-    public $AddTable = array();
+    public $AddTable = [];
 
     /**
      * Время запуска сниппета
@@ -194,7 +194,7 @@ abstract class DocLister
      * @param int $startTime время запуска сниппета
      * @throws Exception
      */
-    public function __construct($modx, $cfg = array(), $startTime = null)
+    public function __construct($modx, $cfg = [], $startTime = null)
     {
         $this->setTimeStart($startTime);
 
@@ -226,11 +226,11 @@ abstract class DocLister
             throw new Exception('no parameters to run DocLister');
         }
 
-        $this->loadLang(array('core', 'json'));
+        $this->loadLang(['core', 'json']);
         $this->setDebug($this->getCFGDef('debug', 0));
 
         if ($this->checkDL()) {
-            $cfg = array();
+            $cfg = [];
             $idType = $this->getCFGDef('idType', '');
             if (empty($idType) && $this->getCFGDef('documents', '') != '') {
                 $idType = 'documents';
@@ -261,12 +261,12 @@ abstract class DocLister
             $this->idField = $this->getCFGDef('idField', 'id');
             $this->parentField = $this->getCFGDef('parentField', 'parent');
             $this->extCache = $this->getExtender('cache', true);
-            $this->extCache->init($this, array(
+            $this->extCache->init($this, [
                 'cache'         => $this->getCFGDef('cache', 1),
                 'cacheKey'      => $this->getCFGDef('cacheKey'),
                 'cacheLifetime' => $this->getCFGDef('cacheLifetime', 0),
                 'cacheStrategy' => $this->getCFGDef('cacheStrategy')
-            ));
+            ]);
             $this->setIDs($IDs);
         }
 
@@ -289,7 +289,7 @@ abstract class DocLister
         if ($ext = $this->getCFGDef('templateExtension')) {
             $DLTemplate->setTemplateExtension($ext);
         }
-        $this->DLTemplate = $DLTemplate->setTemplateData(array('DocLister' => $this));
+        $this->DLTemplate = $DLTemplate->setTemplateData(['DocLister' => $this]);
     }
 
     /**
@@ -299,7 +299,7 @@ abstract class DocLister
      */
     public function smartSplit($str)
     {
-        $res = array();
+        $res = [];
         $cur = '';
         $open = 0;
         $strlen = mb_strlen($str, 'UTF-8');
@@ -465,7 +465,7 @@ abstract class DocLister
      * @param bool $nop создавать ли пустой объект запрашиваемого типа
      * @return array|mixed|xNop
      */
-    public function jsonDecode($json, $config = array(), $nop = false)
+    public function jsonDecode($json, $config = [], $nop = false)
     {
         $this->debug->debug(
             'Decode JSON: ' . $this->debug->dumpData($json) . "\r\nwith config: " . $this->debug->dumpData($config),
@@ -488,7 +488,7 @@ abstract class DocLister
     public function isErrorJSON($json)
     {
         $error = jsonHelper::json_last_error_msg();
-        if (!in_array($error, array('error_none', 'other'))) {
+        if (!in_array($error, ['error_none', 'other'])) {
             $this->debug->error($this->getMsg('json.' . $error) . ": " . $this->debug->dumpData($json, 'code'), 'JSON');
             $error = true;
         }
@@ -537,7 +537,7 @@ abstract class DocLister
             $this->_loadExtender('prepare');
         }
 
-        $this->config->setConfig(array('extender' => implode(",", $extenders)));
+        $this->config->setConfig(['extender' => implode(",", $extenders)]);
         $this->debug->debugEnd("checkDL");
 
         return $flag;
@@ -552,7 +552,7 @@ abstract class DocLister
      */
     private function unsetArrayVal($data, $val)
     {
-        $out = array();
+        $out = [];
         if (is_array($data)) {
             foreach ($data as $item) {
                 if ($item != $val) {
@@ -609,7 +609,7 @@ abstract class DocLister
      */
     public function render($tpl = '')
     {
-        $this->debug->debug(array('Render data with template ' => $tpl), 'render', 2, array('html'));
+        $this->debug->debug(['Render data with template ' => $tpl], 'render', 2, ['html']);
         $out = '';
         if (1 == $this->getCFGDef('tree', '0')) {
             foreach ($this->_tree as $item) {
@@ -653,7 +653,7 @@ abstract class DocLister
     public function getCurrentMODXPageID()
     {
         $id = isset($this->modx->documentIdentifier) ? (int)$this->modx->documentIdentifier : 0;
-        $docData = isset($this->modx->documentObject) ? $this->modx->documentObject : array();
+        $docData = isset($this->modx->documentObject) ? $this->modx->documentObject : [];
 
         return empty($id) ? \APIHelpers::getkey($docData, 'id', 0) : $id;
     }
@@ -748,8 +748,8 @@ abstract class DocLister
 
         $this->debug->debugEnd(
             "toPlaceholders",
-            array($key . " placeholder" => $data),
-            array('html')
+            [$key . " placeholder" => $data],
+            ['html']
         );
 
         return $out;
@@ -771,10 +771,10 @@ abstract class DocLister
             $data = explode($sep, $data);
         }
         if (!is_array($data)) {
-            $data = array(); //@TODO: throw
+            $data = []; //@TODO: throw
         }
 
-        $out = array();
+        $out = [];
         foreach ($data as $item) {
             if ($item !== '') {
                 $out[] = $this->modx->getDatabase()->escape($item);
@@ -804,7 +804,7 @@ abstract class DocLister
         }
         if (file_exists(dirname(dirname(__FILE__)) . "/lang/" . $lang . ".php")) {
             $tmp = include(dirname(__FILE__) . "/lang/" . $lang . ".php");
-            $this->_customLang = is_array($tmp) ? $tmp : array();
+            $this->_customLang = is_array($tmp) ? $tmp : [];
         }
 
         return $this->_customLang;
@@ -830,14 +830,14 @@ abstract class DocLister
             2
         );
         if (is_scalar($name)) {
-            $name = array($name);
+            $name = [$name];
         }
         foreach ($name as $n) {
             if (file_exists(dirname(__FILE__) . "/lang/" . $lang . "/" . $n . ".inc.php")) {
                 $tmp = include(dirname(__FILE__) . "/lang/" . $lang . "/" . $n . ".inc.php");
                 if (is_array($tmp)) {
                     /**
-                     * Переименовыываем элементы массива из array('test'=>'data') в array('name.test'=>'data')
+                     * Переименовыываем элементы массива из ['test'=>'data'] в ['name.test'=>'data']
                      */
                     if ($rename) {
                         $tmp = $this->renameKeyArr($tmp, $n, '', '.');
@@ -931,7 +931,7 @@ abstract class DocLister
      */
     private function _getChunk($name)
     {
-        $this->debug->debug(array('Get chunk by name' => $name), "getChunk", 2, array('html'));
+        $this->debug->debug(['Get chunk by name' => $name], "getChunk", 2, ['html']);
         //without trim
         $tpl = DLTemplate::getInstance($this->getMODX())->getChunk($name);
         $tpl = $this->parseLang($tpl);
@@ -949,10 +949,10 @@ abstract class DocLister
      */
     public function parseLang($tpl)
     {
-        $this->debug->debug(array("parseLang" => $tpl), "parseLang", 2, array('html'));
+        $this->debug->debug(["parseLang" => $tpl], "parseLang", 2, ['html']);
         if (is_scalar($tpl) && !empty($tpl)) {
             if (preg_match_all("/\[\%([a-zA-Z0-9\.\_\-]+)\%\]/", $tpl, $match)) {
-                $langVal = array();
+                $langVal = [];
                 foreach ($match[1] as $item) {
                     $langVal[] = $this->getMsg($item);
                 }
@@ -974,13 +974,13 @@ abstract class DocLister
      * @param bool $parseDocumentSource render html template via DocumentParser::parseDocumentSource()
      * @return string html template with data without placeholders
      */
-    public function parseChunk($name, $data = array(), $parseDocumentSource = false)
+    public function parseChunk($name, $data = [], $parseDocumentSource = false)
     {
         $this->debug->debug(
-            array("parseChunk" => $name, "With data" => print_r($data, 1)),
+            ["parseChunk" => $name, "With data" => print_r($data, 1)],
             "parseChunk",
             2,
-            array('html', null)
+            ['html', null]
         );
         $disablePHx = $this->getCFGDef('disablePHx', 0);
         $out = $this->DLTemplate->parseChunk($name, $data, $parseDocumentSource, (bool)$disablePHx);
@@ -1023,20 +1023,20 @@ abstract class DocLister
         if ((($this->getCFGDef("noneWrapOuter", "1") && $docs == 0) || $docs > 0) && !empty($this->ownerTPL) || !empty($wrap)) {
             $this->debug->debug("", "renderWrapTPL", 2);
             $parse = true;
-            $plh = array($this->getCFGDef("sysKey", "dl") . ".wrap" => $data);
+            $plh = [$this->getCFGDef("sysKey", "dl") . ".wrap" => $data];
             /**
              * @var $extPrepare prepare_DL_Extender
              */
             $extPrepare = $this->getExtender('prepare');
             if ($extPrepare) {
-                $params = $extPrepare->init($this, array(
-                    'data'      => array(
+                $params = $extPrepare->init($this, [
+                    'data'      => [
                         'docs'         => $this->_docs,
                         'placeholders' => $plh
-                    ),
+                    ],
                     'nameParam' => 'prepareWrap',
                     'return'    => 'placeholders'
-                ));
+                ]);
                 if ($params === false) {
                     $out = $data;
                     $parse = false;
@@ -1045,9 +1045,9 @@ abstract class DocLister
             }
             if ($parse && !empty($this->ownerTPL)) {
                 $this->debug->updateMessage(
-                    array("render ownerTPL" => $this->ownerTPL, "With data" => print_r($plh, 1)),
+                    ["render ownerTPL" => $this->ownerTPL, "With data" => print_r($plh, 1)],
                     "renderWrapTPL",
-                    array('html', null)
+                    ['html', null]
                 );
                 $out = $this->parseChunk($this->ownerTPL, $plh);
             }
@@ -1069,7 +1069,7 @@ abstract class DocLister
      */
     protected function uniformPrepare(&$data, $i = 0)
     {
-        $class = array();
+        $class = [];
 
         $iterationName = ($i % 2 == 1) ? 'Odd' : 'Even';
         $tmp = strtolower($iterationName);
@@ -1148,12 +1148,12 @@ abstract class DocLister
      * @param array $array данные которые необходимо примешать к ответу на каждой записи $data
      * @return string JSON строка
      */
-    public function getJSON($data, $fields, $array = array())
+    public function getJSON($data, $fields, $array = [])
     {
-        $out = array();
+        $out = [];
         $fields = is_array($fields) ? $fields : explode(",", $fields);
         if (is_array($array) && count($array) > 0) {
-            $tmp = array();
+            $tmp = [];
             foreach ($data as $i => $v) { //array_merge not valid work with integer index key
                 $tmp[$i] = (isset($array[$i]) ? array_merge($v, $array[$i]) : $v);
             }
@@ -1161,7 +1161,7 @@ abstract class DocLister
         }
 
         foreach ($data as $num => $doc) {
-            $tmp = array();
+            $tmp = [];
             foreach ($doc as $name => $value) {
                 if (in_array($name, $fields) || (isset($fields[0]) && $fields[0] == '1')) {
                     $tmp[str_replace(".", "_", $name)] = $value; //JSON element name without dot
@@ -1171,15 +1171,15 @@ abstract class DocLister
         }
 
         if ('new' == $this->getCFGDef('JSONformat', 'old')) {
-            $return = array();
+            $return = [];
 
-            $return['rows'] = array();
+            $return['rows'] = [];
             foreach ($out as $key => $item) {
                 $return['rows'][] = $item;
             }
             $return['total'] = $this->getChildrenCount();
         } elseif ('simple' == $this->getCFGDef('JSONformat', 'old')) {
-            $return = array();
+            $return = [];
             foreach ($out as $key => $item) {
                 $return[] = $item;
             }
@@ -1199,7 +1199,7 @@ abstract class DocLister
      * @param string $contentField
      * @return mixed|string
      */
-    protected function getSummary(array $item = array(), $extSummary = null, $introField = '', $contentField = '')
+    protected function getSummary(array $item = [], $extSummary = null, $introField = '', $contentField = '')
     {
         $out = '';
 
@@ -1216,13 +1216,13 @@ abstract class DocLister
             $out = $item[$introField];
         } else {
             if (!empty($contentField) && !empty($item[$contentField]) && mb_strlen($item[$contentField], 'UTF-8') > 0) {
-                $out = $extSummary->init($this, array(
+                $out = $extSummary->init($this, [
                     "content"      => $item[$contentField],
                     "action"       => $this->getCFGDef("summary", ""),
                     "cutSummary"   => $this->getCFGDef('cutSummary'),
                     "dotSummary"   => $this->getCFGDef('dotSummary'),
                     'breakSummary' => $this->getCFGDef('breakSummary')
-                ));
+                ]);
             }
         }
 
@@ -1359,7 +1359,7 @@ abstract class DocLister
             'cleanIDs',
             2
         );
-        $out = array();
+        $out = [];
         if (!is_array($IDs)) {
             $IDs = explode($sep, $IDs);
         }
@@ -1394,7 +1394,7 @@ abstract class DocLister
      */
     public function getOneField($userField, $uniq = false)
     {
-        $out = array();
+        $out = [];
         foreach ($this->_docs as $doc => $val) {
             if (isset($val[$userField]) && (($uniq && !in_array($val[$userField], $out)) || !$uniq)) {
                 $out[$doc] = $val[$userField];
@@ -1468,12 +1468,12 @@ abstract class DocLister
                 break;
             case 'doclist':
                 $idList = $this->sanitarIn($this->IDs, ',', false);
-                $out = array('orderBy' => "FIND_IN_SET({$this->getCFGDef('sortBy', $this->getPK())}, '{$idList}')");
+                $out = ['orderBy' => "FIND_IN_SET({$this->getCFGDef('sortBy', $this->getPK())}, '{$idList}')"];
                 $this->config->setConfig($out); //reload config;
                 $sort = "ORDER BY " . $out['orderBy'];
                 break;
             default:
-                $out = array('orderBy' => '', 'order' => '', 'sortBy' => '');
+                $out = ['orderBy' => '', 'order' => '', 'sortBy' => ''];
                 if (($tmp = $this->getCFGDef('orderBy', '')) != '') {
                     $out['orderBy'] = $tmp;
                 } else {
@@ -1485,7 +1485,7 @@ abstract class DocLister
                             $out['order'] = $tmp;
                         // no break
                     }
-                    if ('' == $out['order'] || !in_array(strtoupper($out['order']), array('ASC', 'DESC'))) {
+                    if ('' == $out['order'] || !in_array(strtoupper($out['order']), ['ASC', 'DESC'])) {
                         $out['order'] = $orderDef; //Default
                     }
 
@@ -1580,21 +1580,21 @@ abstract class DocLister
      */
     private function _treeBuild($data, $idName, $pidName)
     {
-        $children = array(); // children of each ID
-        $ids = array();
+        $children = []; // children of each ID
+        $ids = [];
         foreach ($data as $i => $r) {
             $row =& $data[$i];
             $id = $row[$idName];
             $pid = $row[$pidName];
             $children[$pid][$id] =& $row;
             if (!isset($children[$id])) {
-                $children[$id] = array();
+                $children[$id] = [];
             }
             $row['#childNodes'] =& $children[$id];
             $ids[$row[$idName]] = true;
         }
         // Root elements are elements with non-found PIDs.
-        $this->_tree = array();
+        $this->_tree = [];
         foreach ($data as $i => $r) {
             $row =& $data[$i];
             if (!isset($ids[$row[$pidName]])) {
@@ -1658,9 +1658,9 @@ abstract class DocLister
         if (!$filter_string) {
             return;
         }
-        $output = array('join' => '', 'where' => '');
+        $output = ['join' => '', 'where' => ''];
         $logic_op_found = false;
-        $joins = $wheres = array();
+        $joins = $wheres = [];
         foreach ($this->_logic_ops as $op => $sql) {
             if (strpos($filter_string, $op) === 0) {
                 $logic_op_found = true;
@@ -1857,6 +1857,6 @@ abstract class DocLister
         $URL = null;
         parse_str(parse_url(MODX_SITE_URL . $_SERVER['REQUEST_URI'], PHP_URL_QUERY), $URL);
 
-        return http_build_query(array_merge($URL, array(DocLister::AliasRequest => null)));
+        return http_build_query(array_merge($URL, [DocLister::AliasRequest => null]));
     }
 }

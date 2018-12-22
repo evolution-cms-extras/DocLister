@@ -77,10 +77,10 @@ class AssetsHelper
             return $output;
         }
 
-        $output .= $this->registerScript('jQuery', array(
+        $output .= $this->registerScript('jQuery', [
                 'src'     => 'assets/js/jquery/jquery-1.9.1.min.js',
                 'version' => '1.9.1'
-            ));
+            ]);
         $output .= '<script type="text/javascript">var jQuery = jQuery.noConflict(true);</script>';
 
         return $output;
@@ -125,7 +125,7 @@ class AssetsHelper
      * @param array $list
      * @return string
      */
-    public function registerScriptsList($list = array())
+    public function registerScriptsList($list = [])
     {
         $out = '';
         if (! \is_array($list)) {

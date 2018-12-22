@@ -10,12 +10,12 @@ class DLdebug
     /**
      * @var array
      */
-    private $_log = array();
+    private $_log = [];
 
     /**
      * @var array
      */
-    private $_calcLog = array();
+    private $_calcLog = [];
 
     /**
      * Объект унаследованный от абстрактоного класса DocLister
@@ -56,7 +56,7 @@ class DLdebug
      */
     public function clearLog()
     {
-        $this->_log = array();
+        $this->_log = [];
 
         return $this;
     }
@@ -82,11 +82,11 @@ class DLdebug
     {
         $mode = (int)$mode;
         if ($mode > 0 && $this->DocLister->getDebug() >= $mode) {
-            $data = array(
+            $data = [
                 'msg'    => $message,
                 'format' => $format,
                 'start'  => microtime(true) - $this->DocLister->getTimeStart()
-            );
+            ];
             if (is_scalar($key) && !empty($key)) {
                 $data['time'] = microtime(true);
                 $this->_calcLog[$key] = $data;
@@ -119,12 +119,12 @@ class DLdebug
     public function debugEnd($key, $msg = null, $format = null)
     {
         if (is_scalar($key) && isset($this->_calcLog[$key], $this->_calcLog[$key]['time']) && $this->DocLister->getDebug() > 0) {
-            $this->_log[$this->countLog()] = array(
+            $this->_log[$this->countLog()] = [
                 'msg'    => isset($msg) ? $msg : $this->_calcLog[$key]['msg'],
                 'start'  => $this->_calcLog[$key]['start'],
                 'time'   => microtime(true) - $this->_calcLog[$key]['time'],
                 'format' => is_null($format) ? $this->_calcLog[$key]['format'] : $format
-            );
+            ];
             unset($this->_calcLog[$key]['time']);
         }
     }
@@ -180,10 +180,10 @@ class DLdebug
 
                 if (isset($item['msg'])) {
                     if (is_scalar($item['msg'])) {
-                        $item['msg'] = array($item['msg']);
+                        $item['msg'] = [$item['msg']];
                     }
                     if (is_scalar($item['format'])) {
-                        $item['format'] = array($item['format']);
+                        $item['format'] = [$item['format']];
                     }
                     $message = '';
                     $i = 0;
@@ -266,7 +266,7 @@ class DLdebug
                     word-break: break-all !important;
                 }
                 </style>
-                <div class=\"dlDebug\"><ul>[+wrap+]</ul></div>", array('wrap' => $out));
+                <div class=\"dlDebug\"><ul>[+wrap+]</ul></div>", ['wrap' => $out]);
             }
         }
 

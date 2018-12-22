@@ -5,7 +5,7 @@ if ( ! defined('MODX_BASE_PATH')) {
 
 setlocale(LC_ALL, 'pl_PL.UTF-8');
 
-$_lang = array(
+$_lang = [
     /** nazwy miesięcy */
     '1'  => 'Styczeń',
     '2'  => 'Luty',
@@ -19,5 +19,5 @@ $_lang = array(
     '10' => 'Październik',
     '11' => 'Listopad',
     '12' => 'Grudzień'
-);
+];
 return $_lang;

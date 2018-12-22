@@ -18,7 +18,7 @@ class site_content_tagsDocLister extends site_contentDocLister
     /**
      * @var array
      */
-    private $tag = array();
+    private $tag = [];
 
     /**
      * site_content_tagsDocLister constructor.
@@ -26,7 +26,7 @@ class site_content_tagsDocLister extends site_contentDocLister
      * @param array $cfg
      * @param null $startTime
      */
-    public function __construct($modx, $cfg = array(), $startTime = null)
+    public function __construct($modx, $cfg = [], $startTime = null)
     {
         parent::__construct($modx, $cfg, $startTime);
         $this->whereTag();
@@ -60,7 +60,7 @@ class site_content_tagsDocLister extends site_contentDocLister
     private function getTag()
     {
         $tags = $this->getCFGDef('tagsData', '');
-        $this->tag = array();
+        $this->tag = [];
         if ($tags != '') {
             $tmp = explode(":", $tags, 2);
             if (count($tmp) == 2) {
@@ -80,7 +80,7 @@ class site_content_tagsDocLister extends site_contentDocLister
                         }
                         break;
                 }
-                $this->tag = array("mode" => $tmp[0], "tag" => $tag);
+                $this->tag = ["mode" => $tmp[0], "tag" => $tag];
                 $this->toPlaceholders($this->sanitarData($tag), 1, "tag");
             }
         }

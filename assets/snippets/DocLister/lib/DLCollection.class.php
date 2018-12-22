@@ -18,7 +18,7 @@ class DLCollection extends Helpers\Collection
      * @param DocumentParser $modx
      * @param mixed $data
      */
-    public function __construct(DocumentParser $modx, $data = array())
+    public function __construct(DocumentParser $modx, $data = [])
     {
         $this->modx = $modx;
         switch (true) {
@@ -63,7 +63,7 @@ class DLCollection extends Helpers\Collection
      * @param array $data
      * @return static
      */
-    public function create(array $data = array())
+    public function create(array $data = [])
     {
         return new static($this->modx, $data);
     }

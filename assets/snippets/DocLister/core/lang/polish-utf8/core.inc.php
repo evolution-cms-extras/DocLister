@@ -5,7 +5,7 @@ if ( ! defined('MODX_BASE_PATH')) {
 
 setlocale(LC_ALL, 'pl_PL.UTF-8');
 
-$_lang = array();
+$_lang = [];
 $_lang['hello'] = 'Cześć';
 
 return $_lang;

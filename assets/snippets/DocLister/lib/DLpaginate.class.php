@@ -47,7 +47,7 @@ class DLpaginate
 
     /*****/
     protected $mode = null;
-    protected $modeConfig = array();
+    protected $modeConfig = [];
 
     private $calculate = false;
     private $pagination;
@@ -57,7 +57,7 @@ class DLpaginate
      * @param array $config
      * @return $this
      */
-    public function setMode($mode, array $config = array())
+    public function setMode($mode, array $config = [])
     {
         $this->mode = $mode;
         $this->modeConfig = $config;
@@ -253,8 +253,8 @@ class DLpaginate
         $out = '';
         if (!$this->calculate && $this->calculate() && !empty($this->pagination)) {
             $out = str_replace(
-                array("[+class+]", "[+wrap+]"),
-                array($this->className, $this->pagination),
+                ["[+class+]", "[+wrap+]"],
+                [$this->className, $this->pagination],
                 $this->mainTpl
             ) . "\n";
         }
@@ -428,7 +428,7 @@ class DLpaginate
      */
     protected function renderItemTPL($tpl, $num)
     {
-        return str_replace(array('[+num+]', '[+link+]'), array($num, $this->get_pagenum_link($num)), $tpl);
+        return str_replace(['[+num+]', '[+link+]'], [$num, $this->get_pagenum_link($num)], $tpl);
     }
 
 }

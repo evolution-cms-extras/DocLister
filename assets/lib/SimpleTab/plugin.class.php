@@ -25,7 +25,7 @@ abstract class Plugin
     /**
      * @var array
      */
-    public $params = array();
+    public $params = [];
     /**
      * @var string
      */
@@ -35,7 +35,7 @@ abstract class Plugin
     public $jsListCustom = '';
     public $cssListDefault = '';
     public $cssListCustom = '';
-    public $pluginEvents = array();
+    public $pluginEvents = [];
     public $_table = '';
     protected $fs = null;
     protected $assets = null;
@@ -87,7 +87,7 @@ abstract class Plugin
      * @param array $ids
      * @param $folder
      */
-    public function clearFolders($ids = array(), $folder)
+    public function clearFolders($ids = [], $folder)
     {
         foreach ($ids as $id) {
             $this->fs->rmDir($folder . $id . '/');
@@ -147,7 +147,7 @@ abstract class Plugin
      * @param array $ph
      * @return string
      */
-    public function renderJS($list, $ph = array())
+    public function renderJS($list, $ph = [])
     {
         $js = '';
         $scripts = MODX_BASE_PATH . $list;
@@ -173,7 +173,7 @@ abstract class Plugin
      */
     public function getTplPlaceholders()
     {
-        $ph = array();
+        $ph = [];
 
         return $ph;
     }
@@ -243,7 +243,7 @@ abstract class Plugin
      * @param array $events
      * @param string $eventsType
      */
-    public function registerEvents($events = array(), $eventsType = '6')
+    public function registerEvents($events = [], $eventsType = '6')
     {
         $eventsTable = $this->modx->getFullTableName('system_eventnames');
         foreach ($events as $event) {

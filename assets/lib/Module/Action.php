@@ -76,7 +76,7 @@ abstract class Action
     {
         $out = self::_workValue(function ($data, $modObj) {
             $listFunction = $data['key'] . 'Lists';
-            $out = method_exists($modObj, $listFunction) ? $modObj->$listFunction() : array();
+            $out = method_exists($modObj, $listFunction) ? $modObj->$listFunction() : [];
             $out['selected'] = $modObj->get($data['key']);
 
             return $out;
@@ -94,7 +94,7 @@ abstract class Action
     {
         self::$TPL = 'ajax/getValue';
         $data = Helper::jeditable('data');
-        $out = array();
+        $out = [];
         if (! empty($data)) {
             $modObj = self::$classTable;
             $modObj->edit($data['id']);
@@ -112,7 +112,7 @@ abstract class Action
     public static function saveValue()
     {
         return self::_workValue(function ($data, $modObj) {
-            $out = array();
+            $out = [];
             if (isset($_POST['value']) && is_scalar($_POST['value'])) {
                 if ($modObj->set($data['key'], $_POST['value'])->save()) {
                     $textMethod = $data['key'] . 'Text';
@@ -134,9 +134,9 @@ abstract class Action
     public static function getValue()
     {
         return self::_workValue(function ($data, $modObj) {
-            return array(
+            return [
                 'value' => $modObj->get($data['key'])
-            );
+            ];
         });
     }
 
@@ -145,13 +145,13 @@ abstract class Action
      */
     public static function deleted()
     {
-        $data = array();
+        $data = [];
         $dataID = (int)Template::getParam('docId', $_GET);
         if ($dataID > 0 && self::_checkObj($dataID)) {
             $oldValue = self::_getValue('deleted_at', $dataID);
-            $q = self::$modx->getDatabase()->update(array(
+            $q = self::$modx->getDatabase()->update([
                 'deleted_at' => empty($oldValue) ? date('Y-m-d H:i:s') : null
-            ), self::$modx->getFullTableName(self::TABLE()), "id = " . $dataID);
+            ], self::$modx->getFullTableName(self::TABLE()), "id = " . $dataID);
             if ($q) {
                 $data['log'] = $oldValue ? 'Запись с ID ' . $dataID . ' восстановлена' : 'Запись с ID ' . $dataID . ' удалена';
             } else {

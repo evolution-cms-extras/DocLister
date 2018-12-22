@@ -4,15 +4,15 @@ if (! defined('MODX_BASE_PATH')) {
 }
 
 $ID = $modx->documentObject['id'];
-$params = is_array($modx->event->params) ? $modx->event->params : array();
-$params = array_merge($params, array(
+$params = is_array($modx->event->params) ? $modx->event->params : [];
+$params = array_merge($params, [
         'api'   => 1,
         'debug' => '0'
-    ));
+    ]);
 
 $json = $modx->runSnippet("DocLister", $params);
-$children = jsonHelper::jsonDecode($json, array('assoc' => true));
-$children = is_array($children) ? $children : array();
+$children = jsonHelper::jsonDecode($json, ['assoc' => true]);
+$children = is_array($children) ? $children : [];
 $self = $prev = $next = null;
 foreach ($children as $key => $data) {
     if (! empty($self)) {
@@ -39,7 +39,7 @@ if ($next == $prev) {
 }
 
 $TPL = DLTemplate::getInstance($modx);
-return ($prev == $ID) ? '' : $TPL->parseChunk($prevnextTPL, array(
+return ($prev == $ID) ? '' : $TPL->parseChunk($prevnextTPL, [
     'prev' => empty($prev) ? '' : $TPL->parseChunk($prevTPL, $children[$prev]),
     'next' => empty($next) ? '' : $TPL->parseChunk($nextTPL, $children[$next]),
-));
+]);

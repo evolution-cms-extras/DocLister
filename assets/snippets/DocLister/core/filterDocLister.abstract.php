@@ -189,7 +189,7 @@ abstract class filterDocLister
                 break;
             case 'containsOne':
                 $words = explode($this->DocLister->getCFGDef('filter_delimiter', ','), $value);
-                $word_arr = array();
+                $word_arr = [];
                 foreach ($words as $word) {
                     /**
                      * $word оставляю без trim, т.к. мало ли, вдруг важно найти не просто слово, а именно его начало
@@ -209,7 +209,7 @@ abstract class filterDocLister
                 break;
             case 'containsAll':
                 $words = explode($this->DocLister->getCFGDef('filter_delimiter', ','), $value);
-                $word_arr = array();
+                $word_arr = [];
                 foreach ($words as $word) {
                     if (($likeWord = $this->DocLister->LikeEscape($output, $word)) !== '') {
                         $word_arr[] = $likeWord;

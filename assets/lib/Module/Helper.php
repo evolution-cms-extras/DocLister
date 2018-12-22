@@ -64,17 +64,17 @@ class Helper extends \APIhelpers
      */
     public static function jeditable($key = 'id', $post = true)
     {
-        $data = array();
+        $data = [];
         $request = $post ? $_POST : $_GET;
         $match = (
             isset($request[$key]) && is_scalar($request[$key]) &&
             preg_match("/^(.*)_(\d+)$/i", $request[$key], $match)
-        ) ? $match : array();
+        ) ? $match : [];
         if (! empty($match)) {
-            $data = array(
+            $data = [
                 'key' => $match[1],
                 'id'  => $match[2]
-            );
+            ];
         }
 
         return $data;
@@ -87,7 +87,7 @@ class Helper extends \APIhelpers
      * @param array $header
      * @return mixed
      */
-    public static function curl($url, $data = '', $post = false, array $header = array())
+    public static function curl($url, $data = '', $post = false, array $header = [])
     {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -115,7 +115,7 @@ class Helper extends \APIhelpers
     {
         require_once(MODX_BASE_PATH . "assets/snippets/DocLister/lib/jsonHelper.class.php");
         $error = \jsonHelper::json_last_error_msg();
-        if (!in_array($error, array('error_none', 'other'))) {
+        if (!in_array($error, ['error_none', 'other'])) {
             $error = true;
         }
 
@@ -130,7 +130,7 @@ class Helper extends \APIhelpers
      * @param int $size
      * @return array
      */
-    public static function readFileLine($path, $callback, array $callbackParams = array(), $lines = 0, $size = 4096)
+    public static function readFileLine($path, $callback, array $callbackParams = [], $lines = 0, $size = 4096)
     {
         $handle = fopen($path, "r");
         $i = $total = 0;
@@ -150,7 +150,7 @@ class Helper extends \APIhelpers
         }
         fclose($handle);
 
-        return array('line' => $i, 'add' => $total);
+        return ['line' => $i, 'add' => $total];
     }
 
 }

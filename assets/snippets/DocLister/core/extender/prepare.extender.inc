@@ -11,7 +11,7 @@ class prepare_DL_Extender extends extDocLister
     /**
      * @var array
      */
-    private $_store = array();
+    private $_store = [];
 
     /**
      * @param $name
@@ -36,7 +36,7 @@ class prepare_DL_Extender extends extDocLister
      */
     protected function run()
     {
-        $out = $this->getCFGDef('data', array());
+        $out = $this->getCFGDef('data', []);
         $nameParam = $this->getCFGDef('nameParam', 'prepare');
         $ret = $this->getCFGDef('return', null);
         if (($prepare = $this->DocLister->getCFGDef($nameParam, '')) != '') {
@@ -65,14 +65,14 @@ class prepare_DL_Extender extends extDocLister
      * @param array $data
      * @return array
      */
-    public function getParams(array $data = array())
+    public function getParams(array $data = [])
     {
-        return array(
+        return [
             '_extDocLister' => $this,
             '_DocLister'    => $this->DocLister,
             'data'          => $data,
             'modx'          => $this->modx
-        );
+        ];
     }
 
     /**
@@ -106,7 +106,7 @@ class prepare_DL_Extender extends extDocLister
                 break;
             case is_string($data):
                 if ($data[0] == '[' || $data[0] == '{') {
-                    $out = $this->DocLister->jsonDecode($data, array('assoc' => true), true);
+                    $out = $this->DocLister->jsonDecode($data, ['assoc' => true], true);
                 } else {
                     $out = unserialize($data);
                 }

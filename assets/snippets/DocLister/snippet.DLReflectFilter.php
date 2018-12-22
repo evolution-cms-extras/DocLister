@@ -17,7 +17,7 @@
 include_once(MODX_BASE_PATH . 'assets/lib/APIHelpers.class.php');
 include_once(MODX_BASE_PATH . 'assets/snippets/DocLister/lib/DLReflect.class.php');
 
-$params = is_array($modx->event->params) ? $modx->event->params : array();
+$params = is_array($modx->event->params) ? $modx->event->params : [];
 
 /**
  * reflectType
@@ -26,14 +26,14 @@ $params = is_array($modx->event->params) ? $modx->event->params : array();
  *            year - по годам
  */
 $reflectType = APIHelpers::getkey($params, 'reflectType', 'month');
-if (!in_array($reflectType, array('year', 'month'))) {
+if (!in_array($reflectType, ['year', 'month'])) {
     return '';
 }
 
 list($dateFormat, $sqlDateFormat, $reflectValidator) = DLReflect::switchReflect($reflectType, function () {
-    return array('m-Y', '%m-%Y', array('DLReflect', 'validateMonth'));
+    return ['m-Y', '%m-%Y', ['DLReflect', 'validateMonth']];
 }, function () {
-    return array('Y', '%Y', array('DLReflect', 'validateYear'));
+    return ['Y', '%Y', ['DLReflect', 'validateYear']];
 });
 
 $reflectSource = APIHelpers::getkey($params, 'reflectSource', 'content');

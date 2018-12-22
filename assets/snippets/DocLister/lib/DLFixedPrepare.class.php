@@ -13,9 +13,9 @@ if (!class_exists("DLFixedPrepare", false)) {
          * @param prepare_DL_Extender $_eDL
          * @return array
          */
-        public static function buildMenu(array $data = array(), DocumentParser $modx, $_DL, prepare_DL_Extender $_eDL)
+        public static function buildMenu(array $data = [], DocumentParser $modx, $_DL, prepare_DL_Extender $_eDL)
         {
-            $params = $_DL->getCFGDef('params', array());
+            $params = $_DL->getCFGDef('params', []);
             if ($_DL->getCfgDef('currentDepth', 1) < $_DL->getCFGDef('maxDepth', 5)) {
                 $params['currentDepth'] = $_DL->getCfgDef('currentDepth', 1) + 1;
                 $params['parents'] = $data['id'];
@@ -67,7 +67,7 @@ if (!class_exists("DLFixedPrepare", false)) {
          * @return array
          */
         public static function firstChar(
-            array $data = array(),
+            array $data = [],
             DocumentParser $modx,
             DocLister $_DocLister,
             prepare_DL_Extender $_extDocLister

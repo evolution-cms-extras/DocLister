@@ -14,7 +14,7 @@ include_once(MODX_BASE_PATH . 'assets/snippets/DocLister/lib/DLCollection.class.
 include_once(MODX_BASE_PATH . 'assets/lib/APIHelpers.class.php');
 include_once(MODX_BASE_PATH . 'assets/snippets/DocLister/lib/DLReflect.class.php');
 
-$params = is_array($modx->event->params) ? $modx->event->params : array();
+$params = is_array($modx->event->params) ? $modx->event->params : [];
 
 $debug = APIHelpers::getkey($params, 'debug', 0);
 
@@ -25,7 +25,7 @@ $debug = APIHelpers::getkey($params, 'debug', 0);
  *            year - по годам
  */
 $reflectType = APIHelpers::getkey($params, 'reflectType', 'month');
-if (!in_array($reflectType, array('year', 'month'))) {
+if (!in_array($reflectType, ['year', 'month'])) {
     return '';
 }
 
@@ -54,9 +54,9 @@ $reflectTPL = APIHelpers::getkey(
 $activeReflectTPL = APIHelpers::getkey($params, 'activeReflectTPL', '@CODE: <li><span>[+title+]</span></li>');
 
 list($dateFormat, $sqlDateFormat, $reflectValidator) = DLReflect::switchReflect($reflectType, function () {
-    return array('m-Y', '%m-%Y', array('DLReflect', 'validateMonth'));
+    return ['m-Y', '%m-%Y', ['DLReflect', 'validateMonth']];
 }, function () {
-    return array('Y', '%Y', array('DLReflect', 'validateYear'));
+    return ['Y', '%Y', ['DLReflect', 'validateYear']];
 });
 $tmp = $originalDate = date($dateFormat);
 
@@ -182,7 +182,7 @@ if ($reflectType === 'month') {
 /** Разбираем API ответ от DocLister'a */
 $totalReflects = json_decode($totalReflects, true);
 if ($totalReflects === null) {
-    $totalReflects = array();
+    $totalReflects = [];
 }
 $totalReflects = new DLCollection($modx, $totalReflects);
 $totalReflects = $totalReflects->filter(function ($el) {
@@ -190,13 +190,13 @@ $totalReflects = $totalReflects->filter(function ($el) {
 });
 /** Добавляем активную дату в коллекцию */
 if ($activeReflect !== null) {
-    $totalReflects->add(array('id' => $activeReflect), $activeReflect);
+    $totalReflects->add(['id' => $activeReflect], $activeReflect);
 }
-$hasCurrentReflect = ($totalReflects->indexOf(array('id' => $originalCurrentReflect)) !== false);
+$hasCurrentReflect = ($totalReflects->indexOf(['id' => $originalCurrentReflect]) !== false);
 
 /** Добавляем текущую дату в коллекцию */
 if ($appendCurrentReflect) {
-    $totalReflects->add(array('id' => $originalCurrentReflect), $originalCurrentReflect);
+    $totalReflects->add(['id' => $originalCurrentReflect], $originalCurrentReflect);
 }
 /** Сортируем даты по возрастанию */
 $totalReflects->sort(function ($a, $b) use ($dateFormat) {
@@ -224,7 +224,7 @@ list($lReflect, $rReflect) = $totalReflects->partition(function (
     return $aDate->getTimestamp() < $bDate->getTimestamp();
 });
 /** Удаляем текущую активную дату из списка дат идущих за текущим */
-if ($rReflect->indexOf(array('id' => $originalCurrentReflect)) !== false) {
+if ($rReflect->indexOf(['id' => $originalCurrentReflect]) !== false) {
     $rReflect->reindex()->remove(0);
 }
 /** Разворачиваем в обратном порядке список дат до текущей даты */
@@ -297,33 +297,33 @@ foreach ($outReflects as $reflectItem) {
     $data = DLReflect::switchReflect($reflectType, function () use ($reflectItem, $DLAPI) {
         list($vMonth, $vYear) = explode('-', $reflectItem, 2);
 
-        return array(
+        return [
             'monthNum'  => $vMonth,
             'monthName' => $DLAPI->getMsg('months.' . (int)$vMonth),
             'year'      => $vYear,
-        );
+        ];
     }, function () use ($reflectItem) {
-        return array(
+        return [
             'year' => $reflectItem
-        );
+        ];
     });
-    $data = array_merge(array(
+    $data = array_merge([
         'title'           => $reflectItem,
-        'url'             => $modx->makeUrl($targetID, '', http_build_query(array($reflectType => $reflectItem))),
+        'url'             => $modx->makeUrl($targetID, '', http_build_query([$reflectType => $reflectItem])),
         'reflects'        => $totalReflects->count(),
         'displayReflects' => $outReflects->count()
-    ), $data);
+    ], $data);
     $out .= $DLAPI->parseChunk($tpl, $data);
 }
 
 /**
  * Заворачиваем в шаблон обертку весь список дат
  */
-$out = $DLAPI->parseChunk($wrapTPL, array(
+$out = $DLAPI->parseChunk($wrapTPL, [
     'wrap'            => $out,
     'reflects'        => $totalReflects->count(),
     'displayReflects' => $outReflects->count()
-));
+]);
 
 /**
  * Ну и выводим стек отладки если это нужно

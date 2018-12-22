@@ -15,17 +15,17 @@ class user_DL_Extender extends extDocLister
     /**
      * @var array
      */
-    private $fields = array();
+    private $fields = [];
 
     /**
      * @var array
      */
-    private $userinfo = array();
+    private $userinfo = [];
 
     /**
      * @var array
      */
-    private $table = array();
+    private $table = [];
 
     /**
      * @return array
@@ -35,7 +35,7 @@ class user_DL_Extender extends extDocLister
         if ('' != $this->_cfg['fields']) {
             $this->table = $this->getTable();
             $this->_cfg['fields'] = explode(",", $this->_cfg['fields']);
-            $userid = array();
+            $userid = [];
             foreach ($this->_cfg['fields'] as $item) {
                 $this->fields[$item] = $this->DocLister->getOneField($item, true);
                 $userid = array_merge($this->fields[$item], $userid);
@@ -54,7 +54,7 @@ class user_DL_Extender extends extDocLister
      */
     public function getUser($field, $user)
     {
-        $out = array();
+        $out = [];
         if (isset($this->fields[$field], $this->userinfo[$user])) {
             $out = $this->userinfo[$user];
         }
@@ -87,7 +87,7 @@ class user_DL_Extender extends extDocLister
     private function getTable()
     {
         $type = $this->DocLister->getCFGDef('usertype', 'web');
-        $table = array();
+        $table = [];
         switch ($type) {
             case 'manager':
             case 'mgr':
@@ -108,13 +108,13 @@ class user_DL_Extender extends extDocLister
      * @param array $user
      * @return array
      */
-    private function getInfo($user = array())
+    private function getInfo($user = [])
     {
         if (!isset($this->table['users'], $this->table['attributes'])) {
             $this->table = $this->getTable();
         }
 
-        $out = array();
+        $out = [];
         if (count($user) > 0) {
             $user = implode(",", $this->DocLister->cleanIDs($user));
             //without a.sessionid and u.password

@@ -9,7 +9,7 @@ if (!isset($schema)) {
     $schema = 'https://www.sitemaps.org/schemas/sitemap/0.9';
 }
 
-$prepare = array();
+$prepare = [];
 $prepare[] = \APIhelpers::getkey($modx->event->params, 'BeforePrepare', '');
 $prepare[] = 'DLSitemap::prepare';
 $prepare[] = \APIhelpers::getkey($modx->event->params, 'AfterPrepare', '');

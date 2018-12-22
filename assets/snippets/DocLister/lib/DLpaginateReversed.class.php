@@ -35,7 +35,7 @@ class DLpaginateReversed extends DLpaginate
     protected function renderItemTPL($tpl, $num)
     {
         $_num = $this->total_pages + 1 - $num;
-        return str_replace(array('[+num+]', '[+link+]'), array($_num, $this->get_pagenum_link($_num)), $tpl);
+        return str_replace(['[+num+]', '[+link+]'], [$_num, $this->get_pagenum_link($_num)], $tpl);
     }
 
     /**

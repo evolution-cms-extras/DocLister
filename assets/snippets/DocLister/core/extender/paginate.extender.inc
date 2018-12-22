@@ -24,7 +24,7 @@ class paginate_DL_Extender extends extDocLister
     /**
      * @var array
      */
-    private $_pages = array();
+    private $_pages = [];
 
     /**
      * Call method
@@ -34,7 +34,7 @@ class paginate_DL_Extender extends extDocLister
     protected function run()
     {
         if (($paginate = $this->DocLister->getCFGDef('paginate', '')) == '') {
-            $this->DocLister->config->setConfig(array('start' => 0));
+            $this->DocLister->config->setConfig(['start' => 0]);
         }
         $this->reverse = $this->DocLister->getCFGDef('reversePagination', 0);
         $pages = $this->getListPages($paginate, 'total');
@@ -48,7 +48,7 @@ class paginate_DL_Extender extends extDocLister
                     $offset = $pages * $display - $this->count;
                     $start -= $offset;
                 }
-                $this->DocLister->config->setConfig(array('start' => $start));
+                $this->DocLister->config->setConfig(['start' => $start]);
                 break;
             case 'pages':
             default:
@@ -67,15 +67,15 @@ class paginate_DL_Extender extends extDocLister
                     $this->_pages['current'] = $start + 1;
                     $offset = $pages * $display - $this->count;
                     if ($this->_pages['current'] > 1) {
-                        $this->DocLister->config->setConfig(array('start' => $start * $display - $offset));
+                        $this->DocLister->config->setConfig(['start' => $start * $display - $offset]);
                     } else {
                         $display = $display - $offset;
-                        $this->DocLister->config->setConfig(array('display' => $display));
+                        $this->DocLister->config->setConfig(['display' => $display]);
                     }
                 } else {
                     $start = (isset($_GET[$requestName]) && intval($_GET[$requestName]) > 1) ? (intval($_GET[$requestName]) - 1) : 0;
                     $this->_pages['current'] = $start + 1;
-                    $this->DocLister->config->setConfig(array('start' => $start * $display));
+                    $this->DocLister->config->setConfig(['start' => $start * $display]);
                 }
 
 
@@ -113,7 +113,7 @@ class paginate_DL_Extender extends extDocLister
                     break;
             }
             if (($offset + $display) > $limit) {
-                $this->DocLister->config->setConfig(array('display' => $limit - $offset));
+                $this->DocLister->config->setConfig(['display' => $limit - $offset]);
             }
         }
 
@@ -219,11 +219,10 @@ class paginate_DL_Extender extends extDocLister
                 $display = $this->DocLister->getCFGDef('display', 0);
                 $offset = $this->reverse ? $this->totalPage() * $display - $this->count : 0;
                 if ($currentPage == 1) {
-                    $this->DocLister->config->setConfig(array('display'=>$display - $offset));
+                    $this->DocLister->config->setConfig(['display'=>$display - $offset]);
                 }
-                $p->setMode('offset', array(
-                    'display' => $display
-                ))->parameterName($this->getRequestName('start'));
+                $p->setMode('offset', compact('display'))
+                    ->parameterName($this->getRequestName('start'));
                 break;
             case ($mode == 'pages' && $this->totalPage() > 1):
                 $p->parameterName($this->getRequestName('page'));
@@ -233,7 +232,7 @@ class paginate_DL_Extender extends extDocLister
             $nextPage = $prevPage = 0;
             if ($this->reverse) {
                 $currentPage = $this->totalPage() + 1 - $currentPage;
-            } 
+            }
             if ($currentPage > 1) {
                 $prevPage = $currentPage - 1;
             }
@@ -292,7 +291,7 @@ class paginate_DL_Extender extends extDocLister
     public function buildUrl($url, $requestName, $params)
     {
         if ($requestName != '' && is_array($params)) {
-            $q = http_build_query(array_merge($params, array($this->getRequestName($requestName) => null)));
+            $q = http_build_query(array_merge($params, [$this->getRequestName($requestName) => null]));
             $url = explode("?", $url, 2);
             $url = $url[0];
             if (!empty($q)) {

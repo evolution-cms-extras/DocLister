@@ -26,7 +26,7 @@ abstract class Template
     /**
      * @var array
      */
-    public $vars = array(
+    public $vars = [
         'modx_lang_attribute',
         'modx_textdir',
         'manager_theme',
@@ -37,7 +37,7 @@ abstract class Template
         'SystemAlertMsgQueque',
         'incPath',
         'content'
-    );
+    ];
     /**
      * @var bool
      */
@@ -127,7 +127,7 @@ abstract class Template
      */
     public function loadVars()
     {
-        $vars = array();
+        $vars = [];
         foreach ($this->vars as $item) {
             global $$item;
             $vars[$item] = $$item;
@@ -150,7 +150,7 @@ abstract class Template
      * @param array $tplParams
      * @return string
      */
-    public function showBody($TplName, array $tplParams = array())
+    public function showBody($TplName, array $tplParams = [])
     {
         ob_start();
         if (file_exists($this->_tplFolder . $TplName . "." . self::TPL_EXT)) {
@@ -169,7 +169,7 @@ abstract class Template
      * @param mixed $default
      * @return mixed|null
      */
-    public static function getParam($key, array $param = array(), $default = null)
+    public static function getParam($key, array $param = [], $default = null)
     {
         return isset($param[$key]) ? $param[$key] : $default;
     }
@@ -181,22 +181,22 @@ abstract class Template
      * @param bool $full
      * @return string
      */
-    public function makeUrl($action, array $data = array(), $module = null, $full = false)
+    public function makeUrl($action, array $data = [], $module = null, $full = false)
     {
         $action = is_scalar($action) ? $action : '';
-        $content = self::getParam('content', $this->vars, array());
+        $content = self::getParam('content', $this->vars, []);
         $data = array_merge(
-            array(
+            [
                 'mode' => Helper::getMode()
-            ),
+            ],
             $data,
-            array(
+            [
                 'a'      => 112,
                 'action' => $action,
                 'id'     => empty($module) ? self::getParam('id', $content, 0) : (int)$module
-            )
+            ]
         );
-        $out = implode("?", array($this->_modx->getManagerPath(), http_build_query($data)));
+        $out = implode("?", [$this->_modx->getManagerPath(), http_build_query($data)]);
         if ($full) {
             $out = $this->_modx->getConfig('site_url') . ltrim($out, '/');
         }

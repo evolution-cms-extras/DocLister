@@ -20,7 +20,7 @@ include_once(MODX_BASE_PATH . 'assets/snippets/DocLister/lib/DLFixedPrepare.clas
 
 $p = &$modx->event->params;
 if (! is_array($p)) {
-    $p = array();
+    $p = [];
 }
 
 /**

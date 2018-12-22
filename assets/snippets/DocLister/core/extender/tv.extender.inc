@@ -41,7 +41,7 @@ class tv_DL_Extender extends extDocLister
     {
         parent::__construct($DocLister, $name);
         if (!isset($this->modx->_TVnames)) {
-            $this->modx->_TVnames = array();
+            $this->modx->_TVnames = [];
         }
         $this->tvValuesTable = $this->DocLister->getCFGDef('tvValuesTable', $this->tvValuesTable());
         $this->_TVprefix = $this->getTVprefix();
@@ -69,7 +69,7 @@ class tv_DL_Extender extends extDocLister
      */
     public function getTVnames()
     {
-        $out = array();
+        $out = [];
         foreach ($this->modx->_TVnames as $name => $tv) {
             $out[$name] = $tv['id'];
         }
@@ -86,18 +86,18 @@ class tv_DL_Extender extends extDocLister
         if (empty($this->modx->_TVnames) || $reload) {
             $this->modx->_TVnames = $this->loadFromCache('_TVnames');
             if ($this->modx->_TVnames === false) {
-                $this->modx->_TVnames = array();
+                $this->modx->_TVnames = [];
                 $from = $this->DocLister->getTable('site_tmplvars');
                 $rs = $this->DocLister->dbQuery("SELECT `id`, `name`, `default_text`, `type`, `display`, `display_params` FROM {$from}");
 
                 while ($item = $this->modx->getDatabase()->getRow($rs)) {
-                    $this->modx->_TVnames[$item['name']] = array(
+                    $this->modx->_TVnames[$item['name']] = [
                         'id'   => $item['id'],
                         'type' => $item['type'],
                         'default' => $item['default_text'],
                         'display' => $item['display'],
                         'display_params' => $item['display_params']
-                    );
+                    ];
                 }
                 $this->saveToCache($this->modx->_TVnames, '_TVnames');
             }
@@ -113,7 +113,7 @@ class tv_DL_Extender extends extDocLister
      */
     public function getTVList($IDs, $tvlist)
     {
-        $out = array();
+        $out = [];
         $tv = $this->getTVid($tvlist);
         if (empty($tv)) {
             return $out;
@@ -132,7 +132,7 @@ class tv_DL_Extender extends extDocLister
         $tmp = explode(",", $this->DocLister->sanitarIn($IDs, ',', false));
         foreach ($tmp as $item) {
             if (!isset($out[$item])) {
-                $out[$item] = array();
+                $out[$item] = [];
             };
         }
         $renderTV = $this->getListRenderTV();
@@ -143,7 +143,7 @@ class tv_DL_Extender extends extDocLister
                 if (!isset($out[$itemid][$name]) || $out[$itemid][$name] === '' || is_null($out[$itemid][$name])) {
                     $out[$itemid][$name] = $tvDef[$name]['default'];
                 }
-                if (in_array($name, $renderTV) || $renderTV == array("*")) {
+                if (in_array($name, $renderTV) || $renderTV == ["*"]) {
                     $out[$itemid][$name] = $this->renderTV($itemid, $name, $out[$itemid][$name], $tvDef[$name]);
                 }
             }
@@ -174,16 +174,16 @@ class tv_DL_Extender extends extDocLister
         if ($tmp != '' && $tmp != '*') {
             $tmp = explode(",", $tmp);
             if (in_array("*", $tmp)) {
-                $tmp = array("*");
+                $tmp = ["*"];
             } else {
                 $out = array_unique($tmp);
-                $tmp = array();
+                $tmp = [];
                 foreach ($out as $item) {
                     $tmp[] = $this->_TVprefix . $item;
                 }
             }
         } else {
-            $tmp = array($tmp);
+            $tmp = [$tmp];
         }
 
         return $tmp;
@@ -221,7 +221,7 @@ class tv_DL_Extender extends extDocLister
         if (!empty($tvlist) && is_scalar($tvlist)) {
             $tvlist = explode(",", $tvlist);
         }
-        $out = array();
+        $out = [];
         foreach ($tvlist as $tv) {
             $tv = trim($tv);
             if (isset($this->modx->_TVnames[$tv])) {
@@ -239,7 +239,7 @@ class tv_DL_Extender extends extDocLister
     public function loadTVDefault($tvId)
     {
         $tvs = array_flip($this->getTVnames());
-        $out = array();
+        $out = [];
         foreach ($tvId as $id) {
             $name = $tvs[$id];
             $out[$this->_TVprefix . $name] = $this->modx->_TVnames[$name];
@@ -257,7 +257,7 @@ class tv_DL_Extender extends extDocLister
         $dTV = explode(',', $this->DocLister->getCFGDef('tvSortWithDefault', ''));
         $dTV[] = $name;
         $tvList = implode(",", array_unique($dTV));
-        $this->DocLister->config->setConfig(array('tvSortWithDefault' => $tvList));
+        $this->DocLister->config->setConfig(['tvSortWithDefault' => $tvList]);
 
         return $tvList;
     }
@@ -272,7 +272,7 @@ class tv_DL_Extender extends extDocLister
         if (preg_match("/^ORDER BY (.*)/", $sort, $match)) {
             $TVnames = $this->getTVnames();
             if (!is_array($TVnames)) {
-                $TVnames = array();
+                $TVnames = [];
             }
             $matches = explode(",", $match[1]);
             $sortType = explode(",", $this->DocLister->getCFGDef('tvSortType'));
@@ -315,7 +315,7 @@ class tv_DL_Extender extends extDocLister
             $sort = "ORDER BY " . implode(",", $matches);
         }
 
-        return array($table, $sort);
+        return [$table, $sort];
     }
 
     /**

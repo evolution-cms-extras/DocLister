@@ -20,9 +20,9 @@ class shopkeeperDocLister extends site_contentDocLister
      * @param array $cfg
      * @param null $startTime
      */
-    public function __construct($modx, $cfg = array(), $startTime = null)
+    public function __construct($modx, $cfg = [], $startTime = null)
     {
-        $cfg = array_merge(array('tvValuesTable' => 'catalog_tmplvar_contentvalues'), $cfg);
+        $cfg = array_merge(['tvValuesTable' => 'catalog_tmplvar_contentvalues'], $cfg);
         parent::__construct($modx, $cfg, $startTime);
     }
 
@@ -47,7 +47,7 @@ class shopkeeperDocLister extends site_contentDocLister
                  * @var $extUser user_DL_Extender
                  */
                 if ($extUser = $this->getExtender('user')) {
-                    $extUser->init($this, array('fields' => $this->getCFGDef("userFields", "")));
+                    $extUser->init($this, ['fields' => $this->getCFGDef("userFields", "")]);
                 }
 
                 /**
@@ -104,10 +104,10 @@ class shopkeeperDocLister extends site_contentDocLister
                     }
 
                     if ($extPrepare) {
-                        $item = $extPrepare->init($this, array(
+                        $item = $extPrepare->init($this, [
                             'data'      => $item,
                             'nameParam' => 'prepare'
-                        ));
+                        ]);
                         if ($item === false) {
                             $this->skippedDocs++;
                             continue;
@@ -152,7 +152,7 @@ class shopkeeperDocLister extends site_contentDocLister
             $where = sqlHelper::trimLogicalOp($where);
 
             $where = "WHERE {$where}";
-            $whereArr = array();
+            $whereArr = [];
             if (!$this->getCFGDef('showNoPublish', 0)) {
                 $whereArr[] = "c.published=1";
             }
@@ -203,9 +203,9 @@ class shopkeeperDocLister extends site_contentDocLister
             $maxDocs = $this->getCFGDef('maxDocs', 0);
             $limit = $maxDocs > 0 ? $this->LimitSQL($this->getCFGDef('maxDocs', 0)) : '';
 
-            $subQuery = trim(implode(' ', array(
+            $subQuery = trim(implode(' ', [
                 'SELECT', 'count(*)', 'FROM', $from, $where, $group, $limit
-            )));
+            ]));
             $rs = $this->dbQuery("SELECT count(*) FROM ({$subQuery}) as `tmp`");
             $out = $this->modx->getDatabase()->getValue($rs);
         }
@@ -218,7 +218,7 @@ class shopkeeperDocLister extends site_contentDocLister
      */
     protected function getDocList()
     {
-        $out = array();
+        $out = [];
         $sanitarInIDs = $this->sanitarIn($this->IDs);
         if ($sanitarInIDs != "''" || $this->getCFGDef('ignoreEmpty', '0')) {
             $where = $this->getCFGDef('addWhereList', '');
@@ -273,7 +273,7 @@ class shopkeeperDocLister extends site_contentDocLister
      */
     public function getChildrenFolder($id)
     {
-        $out = array();
+        $out = [];
         $where = $this->getCFGDef('addWhereFolder', '');
         $where = sqlHelper::trimLogicalOp($where);
         if ($where != '') {
@@ -303,8 +303,8 @@ class shopkeeperDocLister extends site_contentDocLister
      */
     protected function getChildrenList()
     {
-        $where = array();
-        $out = array();
+        $where = [];
+        $out = [];
 
         $tmpWhere = $this->getCFGDef('addWhereList', '');
         $tmpWhere = sqlHelper::trimLogicalOp($tmpWhere);

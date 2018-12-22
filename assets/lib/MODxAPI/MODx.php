@@ -56,7 +56,7 @@ class MODxAPIhelpers
      * @param array $mixArray
      * @return bool
      */
-    public function checkString($value, $minLen = 1, $alph = array(), $mixArray = array())
+    public function checkString($value, $minLen = 1, $alph = [], $mixArray = [])
     {
         return \APIhelpers::checkString($value, $minLen, $alph, $mixArray);
     }
@@ -77,17 +77,17 @@ abstract class MODxAPI extends MODxAPIhelpers
     /**
      * @var array
      */
-    protected $log = array();
+    protected $log = [];
 
     /**
      * @var array
      */
-    protected $field = array();
+    protected $field = [];
 
     /**
      * @var array
      */
-    protected $default_field = array();
+    protected $default_field = [];
 
     /**
      * @var mixed
@@ -97,7 +97,7 @@ abstract class MODxAPI extends MODxAPIhelpers
     /**
      * @var array
      */
-    protected $set = array();
+    protected $set = [];
 
     /**
      * @var bool
@@ -122,17 +122,17 @@ abstract class MODxAPI extends MODxAPIhelpers
     /**
      * @var array
      */
-    protected $_query = array();
+    protected $_query = [];
 
     /**
      * @var array
      */
-    protected $jsonFields = array();
+    protected $jsonFields = [];
 
     /**
      * @var array
      */
-    protected $store = array();
+    protected $store = [];
 
     /**
      * @var DLCollection
@@ -142,7 +142,7 @@ abstract class MODxAPI extends MODxAPIhelpers
     /**
      * @var array
      */
-    private $_table = array();
+    private $_table = [];
 
     private $cache = false;
 
@@ -275,7 +275,7 @@ abstract class MODxAPI extends MODxAPIhelpers
      * @param bool $flag
      * @return $this
      */
-    final public function invokeEvent($name, $data = array(), $flag = false)
+    final public function invokeEvent($name, $data = [], $flag = false)
     {
         if ((bool)$flag === true) {
             $this->modx->invokeEvent($name, $data);
@@ -290,7 +290,7 @@ abstract class MODxAPI extends MODxAPIhelpers
      * @param boolean $flag
      * @return array|bool
      */
-    final public function getInvokeEventResult($name, $data = array(), $flag = null)
+    final public function getInvokeEventResult($name, $data = [], $flag = null)
     {
         $flag = (isset($flag) && $flag !== '') ? (bool)$flag : false;
 
@@ -302,7 +302,7 @@ abstract class MODxAPI extends MODxAPIhelpers
      */
     final public function clearLog()
     {
-        $this->log = array();
+        $this->log = [];
 
         return $this;
     }
@@ -349,7 +349,7 @@ abstract class MODxAPI extends MODxAPIhelpers
      */
     final public function clearCache($fire_events = false, $custom = false)
     {
-        $IDs = array();
+        $IDs = [];
         if ($custom === false) {
             $this->modx->clearCache();
             include_once(MODX_MANAGER_PATH . 'processors/cache_sync.class.processor.php');
@@ -360,7 +360,7 @@ abstract class MODxAPI extends MODxAPIhelpers
             $sync->emptyCache();
         } else {
             if (is_scalar($custom)) {
-                $custom = array($custom);
+                $custom = [$custom];
             }
             switch ($this->modx->getConfig('cache_type')) {
                 case 2:
@@ -382,7 +382,7 @@ abstract class MODxAPI extends MODxAPIhelpers
             }
             clearstatcache();
         }
-        $this->invokeEvent('OnSiteRefresh', array('IDs' => $IDs), $fire_events);
+        $this->invokeEvent('OnSiteRefresh', compact('IDs'), $fire_events);
     }
 
     /**
@@ -511,7 +511,7 @@ abstract class MODxAPI extends MODxAPIhelpers
      * @param array $data
      * @return $this
      */
-    public function store($data = array())
+    public function store($data = [])
     {
         if (is_array($data)) {
             $this->store = $data;
@@ -557,7 +557,7 @@ abstract class MODxAPI extends MODxAPIhelpers
      * @return array
      * @throws Exception
      */
-    final public function cleanIDs($IDs, $sep = ',', $ignore = array())
+    final public function cleanIDs($IDs, $sep = ',', $ignore = [])
     {
         $out = APIhelpers::cleanIDs($IDs, $sep, $ignore);
 
@@ -580,7 +580,7 @@ abstract class MODxAPI extends MODxAPIhelpers
 
         if ($this->jsonError($json)) {
             if (isset($callback) && is_callable($callback)) {
-                call_user_func_array($callback, array($json));
+                call_user_func_array($callback, [$json]);
             } else {
                 if (isset($callback)) {
                     throw new Exception("Can't call callback JSON unpack <pre>" . print_r($callback, 1) . "</pre>");
@@ -605,7 +605,7 @@ abstract class MODxAPI extends MODxAPIhelpers
     {
         $data = $this->toArray();
         if (isset($callback) && is_callable($callback)) {
-            $data = call_user_func_array($callback, array($data));
+            $data = call_user_func_array($callback, [$data]);
         } else {
             if (isset($callback)) {
                 throw new Exception("Can't call callback JSON pre pack <pre>" . print_r($callback, 1) . "</pre>");
@@ -651,7 +651,7 @@ abstract class MODxAPI extends MODxAPIhelpers
         if ($suffix !== '') {
             $tpl .= $sep . $suffix;
         }
-        $out = array();
+        $out = [];
         $fields = $this->field;
         $fields[$this->fieldPKName()] = $this->getID();
         if ($tpl !== $plh) {
@@ -693,7 +693,7 @@ abstract class MODxAPI extends MODxAPIhelpers
         if (! is_array($data)) {
             $data = explode($sep, $data);
         }
-        $out = array();
+        $out = [];
         foreach ($data as $item) {
             if ($item !== '') {
                 $out[] = $this->escape($item);
@@ -713,7 +713,7 @@ abstract class MODxAPI extends MODxAPIhelpers
     public function checkUnique($table, $field, $PK = 'id')
     {
         if (is_array($field)) {
-            $where = array();
+            $where = [];
             foreach ($field as $_field) {
                 $val = $this->get($_field);
                 if ($val != '') {
@@ -744,7 +744,7 @@ abstract class MODxAPI extends MODxAPIhelpers
      * @param array $data
      * @return $this
      */
-    public function create($data = array())
+    public function create($data = [])
     {
         $this->close();
         $this->fromArray($data);
@@ -760,7 +760,7 @@ abstract class MODxAPI extends MODxAPIhelpers
     {
         $this->edit($id)->id = 0;
         $this->newDoc = true;
-        $this->store = array();
+        $this->store = [];
 
         return $this;
     }
@@ -772,9 +772,9 @@ abstract class MODxAPI extends MODxAPIhelpers
     {
         $this->newDoc = true;
         $this->id = null;
-        $this->field = array();
-        $this->set = array();
-        $this->store = array();
+        $this->field = [];
+        $this->set = [];
+        $this->store = [];
         $this->markAllDecode();
     }
 
@@ -979,10 +979,10 @@ abstract class MODxAPI extends MODxAPIhelpers
      */
     public function decodeField($field, $store = false)
     {
-        $out = array();
+        $out = [];
         if ($this->isDecodableField($field)) {
             $data = $this->get($field);
-            $out = jsonHelper::jsonDecode($data, array('assoc' => true), true);
+            $out = jsonHelper::jsonDecode($data, ['assoc' => true], true);
         }
         if ($store) {
             $this->field[$field] = $out;

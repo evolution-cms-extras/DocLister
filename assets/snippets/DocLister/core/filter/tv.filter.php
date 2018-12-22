@@ -47,7 +47,7 @@ class tv_DL_filter extends content_DL_filter
             $this->extTV->getAllTV_Name();
             $tmp = $this->extTV->getTVid($this->field);
             if (!is_array($tmp)) {
-                $tmp = array();
+                $tmp = [];
             }
             $tmp = array_keys($tmp);
             if (count($tmp) == 1) {

@@ -31,7 +31,7 @@ class DLTemplate
     protected $twigEnabled = false;
     protected $bladeEnabled = false;
 
-    protected $templateData = array();
+    protected $templateData = [];
 
     public $phx;
 
@@ -109,7 +109,7 @@ class DLTemplate
      */
     protected function cleanPath($path)
     {
-        return preg_replace(array('/\.*[\/|\\\]/i', '/[\/|\\\]+/i'), array('/', '/'), $path);
+        return preg_replace(['/\.*[\/|\\\]/i', '/[\/|\\\]+/i'], ['/', '/'], $path);
     }
 
     public function getTemplateExtension()
@@ -140,7 +140,7 @@ class DLTemplate
      * @param array $data
      * @return $this
      */
-    public function setTemplateData($data = array())
+    public function setTemplateData($data = [])
     {
         if (is_array($data)) {
             $this->templateData = $data;
@@ -153,7 +153,7 @@ class DLTemplate
      * @param array $data
      * @return array
      */
-    public function getTemplateData($data = array())
+    public function getTemplateData($data = [])
     {
         $plh = $this->templateData;
         $plh['data'] = $data;
@@ -348,10 +348,10 @@ class DLTemplate
         }
         $m->documentContent = $tpl;
         if ($events) {
-            $m->invokeEvent("OnLoadWebDocument", array(
+            $m->invokeEvent("OnLoadWebDocument", [
                 'source'   => 'DLTemplate',
                 'mainModx' => $this->modx,
-            ));
+            ]);
         }
 
         return $this->parseDocumentSource($m->documentContent, $m);
@@ -384,7 +384,7 @@ class DLTemplate
      * @param bool $parseDocumentSource render html template via DocumentParser::parseDocumentSource()
      * @return string html template with data without placeholders
      */
-    public function parseChunk($name, $data = array(), $parseDocumentSource = false, $disablePHx = false)
+    public function parseChunk($name, $data = [], $parseDocumentSource = false, $disablePHx = false)
     {
         $out = $this->getChunk($name);
         switch (true) {
@@ -403,7 +403,7 @@ class DLTemplate
                     if (is_null($this->phx) || !($this->phx instanceof DLphx)) {
                         $this->phx = $this->createPHx(0, 1000);
                     }
-                    $this->phx->placeholders = array();
+                    $this->phx->placeholders = [];
                     $this->setPHxPlaceholders($data);
                     $out = $this->phx->Parse($out);
                 }
@@ -452,9 +452,9 @@ class DLTemplate
         }
         if ($twig && class_exists('Twig_Loader_Array')) {
             $twig->getLoader()->addLoader(
-                new Twig_Loader_Array(array(
+                new Twig_Loader_Array([
                     md5($name) => $tpl
-                ))
+                ])
             );
         }
 
@@ -549,7 +549,7 @@ class DLTemplate
         for ($i = 1; $i <= $maxPasses; $i++) {
             $html = $out;
             if (preg_match('/\[\!(.*)\!\]/us', $out)) {
-                $out = str_replace(array('[!', '!]'), array('[[', ']]'), $out);
+                $out = str_replace(['[!', '!]'], ['[[', ']]'], $out);
             }
             if ($i <= $minPasses || $out != $html) {
                 $out = $modx->parseDocumentSource($out);

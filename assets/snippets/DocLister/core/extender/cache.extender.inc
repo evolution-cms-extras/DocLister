@@ -91,10 +91,10 @@ class cache_DL_Extender extends extDocLister
     public function setCacheKey()
     {
         if ($this->enabled && is_callable($this->keyGenerator)) {
-            $key = call_user_func_array($this->keyGenerator, array(
+            $key = call_user_func_array($this->keyGenerator, [
                 'modx'      => $this->modx,
                 'DocLister' => $this
-            ));
+            ]);
         } else {
             if (!$key = $this->getCFGDef('cacheKey', '')) {
                 $config = $this->DocLister->config->getConfig();

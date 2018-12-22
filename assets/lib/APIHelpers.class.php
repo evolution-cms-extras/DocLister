@@ -145,7 +145,7 @@ class APIhelpers
             $data = 'Aa0.';
         }
         $opt = strlen($data);
-        $pass = array();
+        $pass = [];
 
         for ($i = $len; $i > 0; $i--) {
             switch ($data[rand(0, ($opt - 1))]) {
@@ -252,7 +252,7 @@ class APIhelpers
     public static function sanitarTag(
         $data,
         $charset = 'UTF-8',
-        $chars = array(
+        $chars = [
             '['   => '&#91;',
             '%5B' => '&#91;',
             ']'   => '&#93;',
@@ -263,7 +263,7 @@ class APIhelpers
             '%7D' => '&#125;',
             '`'   => '&#96;',
             '%60' => '&#96;'
-        )
+        ]
     ) {
         switch (true) {
             case is_scalar($data):
@@ -274,7 +274,7 @@ class APIhelpers
                 );
                 break;
             case is_array($data):
-                $out = array();
+                $out = [];
                 foreach ($data as $key => $val) {
                     $key = self::sanitarTag($key, $charset, $chars);
                     $out[$key] = self::sanitarTag($val, $charset, $chars);
@@ -308,19 +308,19 @@ class APIhelpers
      * @param array $mixArray Примесь символов, которые так же могут использоваться в строке
      * @return bool
      */
-    public static function checkString($value, $minLen = 1, $alph = array(), $mixArray = array())
+    public static function checkString($value, $minLen = 1, $alph = [], $mixArray = [])
     {
         $flag = true;
         $len = mb_strlen($value, 'UTF-8');
         $value = trim($value);
         if (mb_strlen($value, 'UTF-8') == $len) {
-            $data = is_array($mixArray) ? $mixArray : array();
-            $alph = is_array($alph) ? array_unique($alph) : array();
+            $data = is_array($mixArray) ? $mixArray : [];
+            $alph = is_array($alph) ? array_unique($alph) : [];
             foreach ($alph as $item) {
                 $item = strtolower($item);
                 switch ($item) {
                     case 'rus':
-                        $data = array_merge($data, array(
+                        $data = array_merge($data, [
                             'А',
                             'Б',
                             'В',
@@ -354,7 +354,7 @@ class APIhelpers
                             'Э',
                             'Ю',
                             'Я'
-                        ));
+                        ]);
                         break;
                     case 'num':
                         $tmp = range('0', '9');
@@ -389,14 +389,14 @@ class APIhelpers
      * @return array
      * @throws Exception
      */
-    public static function cleanIDs($IDs, $sep = ',', $ignore = array())
+    public static function cleanIDs($IDs, $sep = ',', $ignore = [])
     {
-        $out = array();
+        $out = [];
         if (!is_array($IDs)) {
             if (is_scalar($IDs)) {
                 $IDs = explode($sep, $IDs);
             } else {
-                $IDs = array();
+                $IDs = [];
                 throw new Exception('Invalid IDs list <pre>' . print_r($IDs, 1) . '</pre>');
             }
         }
@@ -425,7 +425,7 @@ class APIhelpers
      */
     public static function renameKeyArr($data, $prefix = '', $suffix = '', $addPS = '.', $sep = '.')
     {
-        $out = array();
+        $out = [];
         if ($prefix == '' && $suffix == '') {
             $out = $data;
         } else {

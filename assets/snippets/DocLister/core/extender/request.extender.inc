@@ -12,7 +12,7 @@ class request_DL_Extender extends extDocLister
     /**
      * @var array
      */
-    private $param = array();
+    private $param = [];
 
     /**
      * @return array|int
@@ -36,7 +36,7 @@ class request_DL_Extender extends extDocLister
      */
     private function parseParam($data)
     {
-        $GLOBArr = array();
+        $GLOBArr = [];
         $name = '';
 
         $tmp = explode(":", $data);
@@ -76,13 +76,13 @@ class request_DL_Extender extends extDocLister
 
         if (isset($GLOBArr[$tmp[0]])) {
             /*
-             array(
-                'g'=>array(
+             [
+                'g' => [
                     'order' => 'ASC'
                     'id'    => '2',
                     'limit' => '10',
-                )
-             )
+                ]
+             ]
             */
             if (isset($tmp[2])) {
                 if (($val = $this->parseValidate($tmp[2], $GLOBArr[$tmp[0]])) !== false) {
@@ -149,7 +149,7 @@ class request_DL_Extender extends extDocLister
      */
     public function getLink()
     {
-        $link = array();
+        $link = [];
         if (isset($this->param['get']) && is_array($this->param['get'])) {
             foreach ($this->param['get'] as $name => $item) {
                 $link[] = $this->_getLink($item, $name);

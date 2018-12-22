@@ -13,7 +13,7 @@ class dataTable extends \autoTable
     /**
      * @var array
      */
-    protected $params = array();
+    protected $params = [];
 
     /**
      * @var \Helpers\FS|null
@@ -53,7 +53,7 @@ class dataTable extends \autoTable
      */
     protected function clearIndexes($ids, $rid)
     {
-        $ids = $this->cleanIDs($ids, ',', array(0));
+        $ids = $this->cleanIDs($ids, ',', [0]);
         $ids = $this->sanitarIn($ids);
         $table = $this->makeTable($this->table);
         $rows = $this->query("SELECT MIN(`{$this->indexName}`) FROM {$table} WHERE `{$this->pkName}` IN ({$ids})");
@@ -85,7 +85,7 @@ class dataTable extends \autoTable
     public function place($ids, $dir, $rid)
     {
         $table = $this->makeTable($this->table);
-        $ids = $this->cleanIDs($ids, ',', array(0));
+        $ids = $this->cleanIDs($ids, ',', [0]);
         if (empty($ids) || is_scalar($ids)) {
             return false;
         }
@@ -294,7 +294,7 @@ class dataTable extends \autoTable
     /**
      * @param array $params
      */
-    public function setParams($params = array())
+    public function setParams($params = [])
     {
         if (is_array($params)) {
             $this->params = $params;

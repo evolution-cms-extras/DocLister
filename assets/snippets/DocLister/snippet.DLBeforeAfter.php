@@ -35,7 +35,7 @@ if (!function_exists('buildUrl')) {
         parse_str(html_entity_decode($params), $params);
         $requestName = 'start';
         if ($requestName != '' && is_array($params)) {
-            $params = array_merge($params, array($requestName => null));
+            $params = array_merge($params, [$requestName => null]);
             if (!empty($start)) {
                 $params[$requestName] = $start;
             }
@@ -52,7 +52,7 @@ if (!function_exists('buildUrl')) {
 
 }
 
-$params = is_array($modx->event->params) ? $modx->event->params : array();
+$params = is_array($modx->event->params) ? $modx->event->params : [];
 
 $out = $beforePage = $afterPage = '';
 
@@ -68,9 +68,9 @@ if (!validateDate($currentDay)) {
 }
 
 $start = (int)APIHelpers::getkey($_GET, 'start', '0');
-$elements = array(
+$elements = [
     'offset' => $start
-);
+];
 //Если положительное значение, то нужы события предстоящие. Если отрицательное - прошедшее
 $rule = ($start >= 0) ? 'after' : 'before';
 $noRule = ($start >= 0) ? 'before' : 'after';
@@ -80,46 +80,46 @@ if ($start < 0) {
 $d = $modx->getDatabase()->escape($currentDay);
 if ($dateSource == 'tv') {
     $params['tvSortType'] = 'TVDATETIME';
-    $query = array(
+    $query = [
         'after'  => "STR_TO_DATE(`dltv_" . $dateField . "_1`.`value`,'%d-%m-%Y %H:%i:%s') >= '" . $d . "'",
         'before' => "STR_TO_DATE(`dltv_" . $dateField . "_1`.`value`,'%d-%m-%Y %H:%i:%s') < '" . $d . "'"
-    );
+    ];
 } else {
-    $query = array(
+    $query = [
         'after'  => "FROM_UNIXTIME(" . $dateField . ") >= '" . $d . "'",
         'before' => "FROM_UNIXTIME(" . $dateField . ") < '" . $d . "'"
-    );
+    ];
 }
-$sort = array(
+$sort = [
     'after'  => 'ASC',
     'before' => 'DESC',
-);
-$params = array_merge($params, array(
+];
+$params = array_merge($params, [
     'display'      => $display,
     'sortBy'       => $dateField,
     'sortDir'      => $sort[$rule],
     'addWhereList' => $query[$rule],
     'offset'       => abs($start),
     'saveDLObject' => 'DLBeforeAfter'
-));
+]);
 
 $out = $modx->runSnippet("DocLister", $params);
 $DLObj = $modx->getPlaceholder('DLBeforeAfter');
 $DLObj->debug->clearLog();
-$DLObj->AddTable = array();
+$DLObj->AddTable = [];
 
-$elements = array_merge(array(
+$elements = array_merge([
     $rule     => $DLObj->getChildrenCount(),
     'display' => $DLObj->getCFGDef('display', $display),
     $noRule   => 0
-), $elements);
+], $elements);
 
-$DLObj->setConfig(array(
+$DLObj->setConfig([
     'addWhereList' => $query[$noRule],
     'sortDir'      => $sort[$noRule],
     'offset'       => 0
-));
-$DLObj->AddTable = array();
+]);
+$DLObj->AddTable = [];
 $elements[$noRule] = $DLObj->getChildrenCount();
 
 $afterStart = $beforeStart = null;
@@ -152,47 +152,47 @@ switch (true) {
             $beforeStart = null;
         }
 }
-$pageParams = array(
+$pageParams = [
     'elementsBefore' => $elements['before'],
     'elementsAfter'  => $elements['after'],
     'pagesBefore'    => ceil($elements['before'] / $elements['display']),
     'pagesAfter'     => ceil($elements['after'] / $elements['display'])
-);
+];
 
 if (!is_null($beforeStart)) {
     $tpl = $DLObj->getCFGDef('TplPrevP', '@CODE: <a href="[+url+]">Назад</a>');
-    $beforePage = $DLObj->parseChunk($tpl, array_merge($pageParams, array(
+    $beforePage = $DLObj->parseChunk($tpl, array_merge($pageParams, [
         'url'      => buildUrl($DLObj->getUrl(), $beforeStart),
         'offset'   => $beforeStart,
         'elements' => $elements['before'],
         'pages'    => ceil($elements['before'] / $elements['display'])
-    )));
+    ]));
 } else {
     if ($DLObj->getCFGDef("PrevNextAlwaysShow", 0)) {
         $tpl = $DLObj->getCFGDef('TplPrevI', '@CODE: Назад');
-        $beforePage = $DLObj->parseChunk($tpl, array_merge($pageParams, array(
+        $beforePage = $DLObj->parseChunk($tpl, array_merge($pageParams, [
             'elements' => $elements['before'],
             'pages'    => ceil($elements['before'] / $elements['display'])
-        )));
+        ]));
     }
 }
 $modx->setPlaceholder('pages.before', $beforePage);
 
 if (!is_null($afterStart)) {
     $tpl = $DLObj->getCFGDef('TplNextP', '@CODE: <a href="[+url+]">Далее</a>');
-    $afterPage = $DLObj->parseChunk($tpl, array_merge($pageParams, array(
+    $afterPage = $DLObj->parseChunk($tpl, array_merge($pageParams, [
         'url'      => buildUrl($DLObj->getUrl(), $afterStart),
         'offset'   => $afterStart,
         'elements' => $elements['after'],
         'pages'    => ceil($elements['before'] / $elements['display'])
-    )));
+    ]));
 } else {
     if ($DLObj->getCFGDef("PrevNextAlwaysShow", 0)) {
         $tpl = $DLObj->getCFGDef('TplNextI', '@CODE: Далее');
-        $afterPage = $DLObj->parseChunk($tpl, array_merge($pageParams, array(
+        $afterPage = $DLObj->parseChunk($tpl, array_merge($pageParams, [
             'elements' => $elements['after'],
             'pages'    => ceil($elements['before'] / $elements['display'])
-        )));
+        ]));
     }
 }
 $modx->setPlaceholder('pages.after', $afterPage);

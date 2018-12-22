@@ -10,13 +10,13 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
     /**
      * @var array
      */
-    protected $data = array();
+    protected $data = [];
 
     /**
      * Collection constructor.
      * @param array $data
      */
-    public function __construct(array $data = array())
+    public function __construct(array $data = [])
     {
         $this->data = $data;
     }
@@ -25,7 +25,7 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
      * @param array $data
      * @return static
      */
-    public function create(array $data = array())
+    public function create(array $data = [])
     {
         return new static($data);
     }
@@ -79,7 +79,7 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
      */
     public function partition(Closure $p)
     {
-        $matches = $noMatches = array();
+        $matches = $noMatches = [];
         foreach ($this->data as $key => $element) {
             if ($p($key, $element)) {
                 $matches[$key] = $element;
@@ -88,7 +88,7 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
             }
         }
 
-        return array($this->create($matches), $this->create($noMatches));
+        return [$this->create($matches), $this->create($noMatches)];
     }
 
     /**
@@ -114,7 +114,7 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
      */
     public function clear()
     {
-        $this->data = array();
+        $this->data = [];
 
         return $this;
     }

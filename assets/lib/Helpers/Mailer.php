@@ -18,7 +18,7 @@ class Mailer
      */
     protected $mail;
     protected $modx;
-    public $config = array();
+    public $config = [];
     protected $debug = false;
     protected $queuePath = 'assets/cache/mail/';
     protected $noemail = false;
@@ -83,7 +83,7 @@ class Mailer
      * @param array $filelist
      * @return $this
      */
-    public function attachFiles($filelist = array())
+    public function attachFiles($filelist = [])
     {
         if (! $this->noemail) {
             $contentType = "application/octetstream";
@@ -174,11 +174,11 @@ class Mailer
      */
     protected function saveMessage()
     {
-        $data = serialize(array(
+        $data = serialize([
             "header" => $this->mail->getMIMEHeader(),
             "body"   => $this->mail->getMIMEBody(),
             "config" => $this->config
-        ));
+        ]);
         $file = $this->getFileName();
         FS::getInstance()->makeDir($this->queuePath);
         $result = @file_put_contents(MODX_BASE_PATH . $this->queuePath . $file, $data) !== false;

@@ -7,27 +7,27 @@ include_once(MODX_BASE_PATH . 'assets/lib/APIHelpers.class.php');
 
 $p = &$modx->event->params;
 if (! is_array($p)) {
-    $p = array();
+    $p = [];
 }
 
 $titleField = APIhelpers::getkey($p, 'titleField', 'pagetitle');
 $valueField = APIhelpers::getkey($p, 'valueField', 'id');
 
 $p = array_merge(
-    array(
+    [
         'idType'     => 'parents',
         'valueField' => $valueField,
         'titleField' => $titleField,
-        'api'        => implode(",", array($titleField, $valueField)),
+        'api'        => implode(",", [$titleField, $valueField]),
         'controller' => 'site_content',
         'debug'      => '0'
-    ),
+    ],
     $p
 );
 
 $json = $modx->runSnippet("DocLister", $p);
-$json = jsonHelper::jsonDecode($json, array('assoc' => true));
-$out = array();
+$json = jsonHelper::jsonDecode($json, ['assoc' => true]);
+$out = [];
 
 $nopTitle = APIhelpers::getkey($p, 'addNopTitle');
 if ($nopTitle) {

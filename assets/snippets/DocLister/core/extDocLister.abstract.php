@@ -32,7 +32,7 @@ abstract class extDocLister
      * @var array
      * @access protected
      */
-    protected $_cfg = array();
+    protected $_cfg = [];
 
     /**
      * @var bool

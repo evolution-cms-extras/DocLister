@@ -22,7 +22,7 @@ class SummaryText
     /**
      * @var array
      */
-    private $_cfg = array('content' => '', 'summary' => '', 'original' => '', 'break' => '');
+    private $_cfg = ['content' => '', 'summary' => '', 'original' => '', 'break' => ''];
 
     /**
      * @var bool|null

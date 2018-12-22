@@ -9,7 +9,7 @@ use APIhelpers;
 
 class Config
 {
-    private $_cfg = array();
+    private $_cfg = [];
     /** @var FS */
     protected $fs;
     protected $path = '';
@@ -19,7 +19,7 @@ class Config
      *
      * @param array $cfg
      */
-    public function __construct($cfg = array())
+    public function __construct($cfg = [])
     {
         if (! empty($cfg)) {
             $this->setConfig($cfg);
@@ -50,7 +50,7 @@ class Config
         if (!is_scalar($name)) {
             $name = '';
         }
-        $config = array();
+        $config = [];
         $name = explode(";", $name);
         foreach ($name as $cfgName) {
             $cfgName = explode(":", $cfgName, 2);
@@ -71,7 +71,7 @@ class Config
             if ($this->fs->checkFile($configFile)) {
                 $json = file_get_contents(MODX_BASE_PATH . $configFile);
                 /** @var array $json */
-                $json = jsonHelper::jsonDecode($json, array('assoc' => true), true);
+                $json = jsonHelper::jsonDecode($json, ['assoc' => true], true);
                 $config = array_merge($config, $json);
             }
         }
@@ -128,16 +128,16 @@ class Config
     {
         switch (gettype($arr)) {
             case 'string':
-                $out = jsonHelper::jsonDecode($arr, array('assoc' => true));
+                $out = jsonHelper::jsonDecode($arr, ['assoc' => true]);
                 if (!is_array($out)) {
-                    $out = $sep ? array_filter(explode($sep, $arr)) : array();
+                    $out = $sep ? array_filter(explode($sep, $arr)) : [];
                 }
                 break;
             case 'array':
                 $out = $arr;
                 break;
             default:
-                $out = array();
+                $out = [];
         }
         return $out;
     }

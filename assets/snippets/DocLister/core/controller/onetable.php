@@ -70,7 +70,7 @@ class onetableDocLister extends DocLister
                  * @var $extUser user_DL_Extender
                  */
                 if ($extUser = $this->getExtender('user')) {
-                    $extUser->init($this, array('fields' => $this->getCFGDef("userFields", "")));
+                    $extUser->init($this, ['fields' => $this->getCFGDef("userFields", "")]);
                 }
 
                 /**
@@ -123,10 +123,10 @@ class onetableDocLister extends DocLister
                     }
 
                     if ($extPrepare) {
-                        $item = $extPrepare->init($this, array(
+                        $item = $extPrepare->init($this, [
                             'data'      => $item,
                             'nameParam' => 'prepare'
-                        ));
+                        ]);
                         if ($item === false) {
                             $this->skippedDocs++;
                             continue;
@@ -159,9 +159,9 @@ class onetableDocLister extends DocLister
      * @param array $array
      * @return string
      */
-    public function getJSON($data, $fields, $array = array())
+    public function getJSON($data, $fields, $array = [])
     {
-        $out = array();
+        $out = [];
         $fields = is_array($fields) ? $fields : explode(",", $fields);
         $date = $this->getCFGDef('dateSource', 'pub_date');
 
@@ -181,10 +181,10 @@ class onetableDocLister extends DocLister
         $extE = $this->getExtender('e', true, true);
         foreach ($data as $num => $row) {
             switch (true) {
-                case ((array('1') == $fields || in_array('summary', $fields)) && $extSummary):
+                case ((['1'] == $fields || in_array('summary', $fields)) && $extSummary):
                     $row['summary'] = $this->getSummary($row, $extSummary, 'introtext');
                 //without break
-                case ((array('1') == $fields || in_array('date', $fields)) && $date != 'date'):
+                case ((['1'] == $fields || in_array('date', $fields)) && $date != 'date'):
                     if (isset($row[$date])) {
                         $_date = is_numeric($row[$date]) && $row[$date] == (int)$row[$date] ? $row[$date] : strtotime($row[$date]);
                         if ($_date !== false) {
@@ -198,14 +198,14 @@ class onetableDocLister extends DocLister
                 //nobreak
             }
 
-            if ($extE && $tmp = $extE->init($this, array('data' => $row))) {
+            if ($extE && $tmp = $extE->init($this, ['data' => $row])) {
                 if (is_array($tmp)) {
                     $row = $tmp;
                 }
             }
 
             if ($extPrepare) {
-                $row = $extPrepare->init($this, array('data' => $row));
+                $row = $extPrepare->init($this, ['data' => $row]);
                 if ($row === false) {
                     continue;
                 }
@@ -221,7 +221,7 @@ class onetableDocLister extends DocLister
      */
     protected function getDocList()
     {
-        $out = array();
+        $out = [];
         $sanitarInIDs = $this->sanitarIn($this->IDs);
         if ($sanitarInIDs != "''" || $this->getCFGDef('ignoreEmpty', '0')) {
             $from = $this->table . " " . $this->_filters['join'];
@@ -234,9 +234,9 @@ class onetableDocLister extends DocLister
 
 
             if ($where != '') {
-                $where = array($where);
+                $where = [$where];
             } else {
-                $where = array();
+                $where = [];
             }
             if ($sanitarInIDs != "''") {
                 $where[] = "{$this->getPK()} IN ({$sanitarInIDs})";
@@ -268,8 +268,8 @@ class onetableDocLister extends DocLister
      */
     protected function getChildrenList()
     {
-        $where = array();
-        $out = array();
+        $where = [];
+        $out = [];
         $from = $this->table . " " . $this->_filters['join'];
         $tmpWhere = $this->getCFGDef('addWhereList', '');
         $tmpWhere = sqlHelper::trimLogicalOp($tmpWhere);
@@ -351,9 +351,9 @@ class onetableDocLister extends DocLister
             //------- end of block -------
 
             if ($where != '') {
-                $where = array($where);
+                $where = [$where];
             } else {
-                $where = array();
+                $where = [];
             }
             if ($sanitarInIDs != "''") {
                 switch ($this->getCFGDef('idType', 'parents')) {
@@ -404,7 +404,7 @@ class onetableDocLister extends DocLister
      */
     public function getChildrenFolder($id)
     {
-        $out = array();
+        $out = [];
         $sanitarInIDs = $this->sanitarIn($id);
 
         $tmp = $this->getCFGDef('addWhereFolder', '');

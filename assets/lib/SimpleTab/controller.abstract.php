@@ -20,7 +20,7 @@ abstract class AbstractController
     public $params = null;
     public $fireEvents = true;
 
-    public $dlParams = array(
+    public $dlParams = [
         "controller"  => "onetable",
         "table"       => "",
         'idField'     => "",
@@ -31,10 +31,8 @@ abstract class AbstractController
         'display'     => 10,
         'offset'      => 0,
         'sortBy'      => "",
-        'sortDir'     => "desc",
-
-
-    );
+        'sortDir'     => "desc"
+    ];
 
     /**
      * Объект DocumentParser - основной класс MODX
@@ -68,7 +66,7 @@ abstract class AbstractController
      */
     public function remove()
     {
-        $out = array();
+        $out = [];
         $ids = isset($_POST['ids']) ? (string)$_POST['ids'] : '';
         $ids = isset($_POST['id']) ? (string)$_POST['id'] : $ids;
         $out['success'] = false;
@@ -86,7 +84,7 @@ abstract class AbstractController
      */
     public function place()
     {
-        $out = array();
+        $out = [];
         $ids = isset($_POST['ids']) ? (string)$_POST['ids'] : '';
         $dir = isset($_POST['dir']) ? $_POST['dir'] : 'top';
         $out['success'] = false;
@@ -104,7 +102,7 @@ abstract class AbstractController
      */
     public function reorder()
     {
-        $out = array();
+        $out = [];
         $source = $_POST['source'];
         $target = $_POST['target'];
         $point = $_POST['point'];
@@ -149,7 +147,7 @@ abstract class AbstractController
         if (isset($_POST['sort'])) {
             $this->dlParams['sortBy'] = preg_replace('/[^A-Za-z0-9_\-]/', '', $_POST['sort']);
         }
-        if (isset($_POST['order']) && in_array(strtoupper($_POST['order']), array("ASC", "DESC"))) {
+        if (isset($_POST['order']) && in_array(strtoupper($_POST['order']), ["ASC", "DESC"])) {
             $this->dlParams['sortDir'] = $_POST['order'];
         }
         foreach ($this->dlParams as &$param) {

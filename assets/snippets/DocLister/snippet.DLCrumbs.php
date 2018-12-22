@@ -21,7 +21,7 @@ if (isset($modx->event->params['config'])) {
     extract($modx->event->params);
 }
 
-$_parents = array();
+$_parents = [];
 $hideMain = (!isset($hideMain) || (int)$hideMain == 0);
 if ($hideMain) {
     $_parents[] = $modx->getConfig('site_start');
@@ -40,15 +40,15 @@ if (isset($showCurrent) && (int)$showCurrent > 0) {
 }
 if (!empty($_parents) && count($_parents) >= (empty($minDocs) ? 0 : (int)$minDocs)) {
     $_options = array_merge(
-        array(
+        [
             'config' => 'crumbs:core'
-        ),
-        !empty($modx->event->params) ? $modx->event->params : array(),
-        array(
+        ],
+        !empty($modx->event->params) ? $modx->event->params : [],
+        [
             'idType'    => 'documents',
             'sortType'  => 'doclist',
             'documents' => implode(",", $_parents)
-        )
+        ]
     );
 
     $_out = $modx->runSnippet("DocLister", $_options);

@@ -14,7 +14,7 @@ class FS
     /**
      * @var array
      */
-    private $_fileInfo = array();
+    private $_fileInfo = [];
 
     /**
      * gets the instance via lazy initialization (created on first usage)
@@ -153,7 +153,7 @@ class FS
             $out = filesize(MODX_BASE_PATH . $this->relativePath($file));
         }
 
-        if($format === true) $format = array('B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB');
+        if($format === true) $format = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
         if (is_array($format)) {
             $size = $out > 0 ? floor(log($out, 1024)) : 0;
             $type = isset($format[$size]) ? ' '.$format[$size] : '';

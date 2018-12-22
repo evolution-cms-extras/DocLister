@@ -9,13 +9,13 @@ class modUsers extends MODxAPI
     /**
      * @var array
      */
-    protected $default_field = array(
-        'user'      => array(
+    protected $default_field = [
+        'user'      => [
             'username' => '',
             'password' => '',
             'cachepwd' => ''
-        ),
-        'attribute' => array(
+        ],
+        'attribute' => [
             'fullname'         => '',
             'role'             => 0,
             'email'            => '',
@@ -41,22 +41,22 @@ class modUsers extends MODxAPI
             'comment'          => '',
             'createdon'        => 0,
             'editedon'         => 0
-        ),
-        'hidden'    => array(
+        ],
+        'hidden'    => [
             'internalKey'
-        )
-    );
+        ]
+    ];
 
     /**
      * @var string
      */
     protected $givenPassword = '';
-    protected $groupIds = array();
-    protected $userIdCache = array(
+    protected $groupIds = [];
+    protected $userIdCache = [
         'attribute.internalKey' => '',
         'attribute.email' => '',
         'user.username' => ''
-    );
+    ];
 
     /**
      * @var integer
@@ -132,7 +132,7 @@ class modUsers extends MODxAPI
      * @param array $data
      * @return $this
      */
-    public function create($data = array())
+    public function create($data = [])
     {
         parent::create($data);
         $this->set('createdon', time());
@@ -146,11 +146,11 @@ class modUsers extends MODxAPI
     public function close()
     {
         parent::close();
-        $this->userIdCache = array(
+        $this->userIdCache = [
             'attribute.internalKey' => '',
             'attribute.email' => '',
             'user.username' => ''
-        );
+        ];
     }
 
     /**
@@ -324,26 +324,26 @@ class modUsers extends MODxAPI
             }
         }
         if (! $this->newDoc && $this->givenPassword) {
-            $this->invokeEvent('OnWebChangePassword', array(
+            $this->invokeEvent('OnWebChangePassword', [
                 'userObj'      => $this,
                 'userid'       => $this->id,
                 'user'         => $this->toArray(),
                 'userpassword' => $this->givenPassword,
                 'internalKey'  => $this->id,
                 'username'     => $this->get('username')
-            ), $fire_events);
+            ], $fire_events);
         }
 
         if (! empty($this->groupIds)) {
             $this->setUserGroups($this->id, $this->groupIds);
         }
 
-        $this->invokeEvent('OnWebSaveUser', array(
+        $this->invokeEvent('OnWebSaveUser', [
             'userObj' => $this,
             'mode'    => $this->newDoc ? "new" : "upd",
             'id'      => $this->id,
             'user'    => $this->toArray()
-        ), $fire_events);
+        ], $fire_events);
 
         if ($clearCache) {
             $this->clearCache($fire_events);
@@ -393,13 +393,13 @@ class modUsers extends MODxAPI
             $flag = $this->deleteQuery();
             $this->query("DELETE FROM {$this->makeTable('web_user_settings')} WHERE webuser='{$this->getID()}'");
             $this->query("DELETE FROM {$this->makeTable('web_groups')} WHERE webuser='{$this->getID()}'");
-            $this->invokeEvent('OnWebDeleteUser', array(
+            $this->invokeEvent('OnWebDeleteUser', [
                 'userObj'     => $this,
                 'userid'      => $this->getID(),
                 'internalKey' => $this->getID(),
                 'username'    => $this->get('username'),
                 'timestamp'   => time()
-            ), $fire_events);
+            ], $fire_events);
         } else {
             $flag = false;
         }
@@ -436,13 +436,13 @@ class modUsers extends MODxAPI
             $flag = true;
             $this->save(false);
             $this->SessionHandler('start', $cookieName, $fulltime);
-            $this->invokeEvent("OnWebLogin", array(
+            $this->invokeEvent("OnWebLogin", [
                 'userObj'      => $this,
                 'userid'       => $this->getID(),
                 'username'     => $this->get('username'),
                 'userpassword' => $this->givenPassword,
                 'rememberme'   => $fulltime
-            ), $fire_events);
+            ], $fire_events);
         }
 
         return $flag;
@@ -494,13 +494,13 @@ class modUsers extends MODxAPI
         $flag = $pluginFlag = false;
         if ((null !== $tmp->getID()) && (! $blocker || ($blocker && ! $tmp->checkBlock($id)))
         ) {
-            $eventResult = $this->getInvokeEventResult('OnWebAuthentication', array(
+            $eventResult = $this->getInvokeEventResult('OnWebAuthentication', [
                 'userObj'       => $this,
                 'userid'        => $tmp->getID(),
                 'username'      => $tmp->get('username'),
                 'userpassword'  => $password,
                 'savedpassword' => $tmp->get('password')
-            ), $fire_events);
+            ], $fire_events);
             if (is_array($eventResult)) {
                 foreach ($eventResult as $result) {
                     $pluginFlag = (bool)$result;
@@ -557,11 +557,11 @@ class modUsers extends MODxAPI
         if (! $uid = $this->modx->getLoginUserID('web')) {
             return;
         }
-        $params = array(
+        $params = [
             'username'    => $_SESSION['webShortname'],
             'internalKey' => $uid,
             'userid'      => $uid // Bugfix by TS
-        );
+        ];
         $this->invokeEvent('OnBeforeWebLogout', $params, $fire_events);
         $this->SessionHandler('destroy', $cookieName ? $cookieName : 'WebLoginPE');
         $this->invokeEvent('OnWebLogout', $params, $fire_events);
@@ -595,7 +595,7 @@ class modUsers extends MODxAPI
                     $_SESSION['webFailedlogins'] = $this->get('failedlogincount');
                     $_SESSION['webLastlogin'] = $this->get('lastlogin');
                     $_SESSION['webnrlogins'] = $this->get('logincount');
-                    $_SESSION['webUsrConfigSet'] = array();
+                    $_SESSION['webUsrConfigSet'] = [];
                     $_SESSION['webUserGroupNames'] = $this->getUserGroups();
                     $_SESSION['webDocgroups'] = $this->getDocumentGroups();
                     if (! empty($remember)) {
@@ -653,7 +653,7 @@ class modUsers extends MODxAPI
         if (! empty($cookieName) && $this->getID() !== null) {
             $secure = $this->isSecure();
             $remember = is_bool($remember) ? $this->getRememberTime() : (int)$remember;
-            $cookieValue = array(md5($this->get('username')), $this->get('password'), $this->get('sessionid'), $remember);
+            $cookieValue = [md5($this->get('username')), $this->get('password'), $this->get('sessionid'), $remember];
             $cookieValue = implode('|', $cookieValue);
             $cookieExpires = time() + $remember;
             setcookie($cookieName, $cookieValue, $cookieExpires, MODX_BASE_URL, '', $secure, true);
@@ -668,7 +668,7 @@ class modUsers extends MODxAPI
      */
     public function getDocumentGroups($userID = 0)
     {
-        $out = array();
+        $out = [];
         $user = $this->switchObject($userID);
         if (null !== $user->getID()) {
             $web_groups = $this->modx->getFullTableName('web_groups');
@@ -690,7 +690,7 @@ class modUsers extends MODxAPI
      */
     public function getUserGroups($userID = 0)
     {
-        $out = array();
+        $out = [];
         $user = $this->switchObject($userID);
         if (null !== $user->getID()) {
             $web_groups = $this->makeTable('web_groups');
@@ -713,7 +713,7 @@ class modUsers extends MODxAPI
      * @param array $groupIds
      * @return $this
      */
-    public function setUserGroups($userID = 0, $groupIds = array())
+    public function setUserGroups($userID = 0, $groupIds = [])
     {
         if (!is_array($groupIds)) {
             return $this;
@@ -732,7 +732,7 @@ class modUsers extends MODxAPI
                 }
             }
             unset($user);
-            $this->groupIds = array();
+            $this->groupIds = [];
         }
 
         return $this;

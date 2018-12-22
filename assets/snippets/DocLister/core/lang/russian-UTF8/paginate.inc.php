@@ -5,7 +5,7 @@ if ( ! defined('MODX_BASE_PATH')) {
 
 setlocale(LC_ALL, 'ru_RU.UTF-8');
 
-$_lang = array();
+$_lang = [];
 $_lang['next'] = 'Далее';
 $_lang['prev'] = 'Назад';
 

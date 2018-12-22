@@ -15,15 +15,15 @@ class e_DL_Extender extends extDocLister
      */
     protected function run()
     {
-        $out = $this->getCFGDef('data', array());
+        $out = $this->getCFGDef('data', []);
         if (($eFields = $this->DocLister->getCFGDef('e', 'title')) != '') {
             if (is_scalar($eFields)) {
                 $eFields = explode(",", $eFields);
             }
-            $sanitarTagsFields = array();
+            $sanitarTagsFields = [];
             if ($sanitarTags = $this->DocLister->getCFGDef('sanitarTags',0)) {
                 if (is_numeric($sanitarTags) && is_array($eFields)) {
-                    $sanitarTagsFields = $eFields;        
+                    $sanitarTagsFields = $eFields;
                 } elseif (is_scalar($sanitarTags)) {
                     $sanitarTagsFields = explode(",", $sanitarTags);
                 }

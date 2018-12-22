@@ -74,7 +74,7 @@ if ($char === null) {
 
 $p = &$modx->event->params;
 if (! is_array($p)) {
-    $p = array();
+    $p = [];
 }
 if (! empty($loadfilter)) {
     $field = explode(".", $field);

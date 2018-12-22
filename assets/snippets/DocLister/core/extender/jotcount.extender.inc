@@ -17,9 +17,9 @@ class jotcount_DL_Extender extends extDocLister
         $join = "LEFT JOIN (SELECT `uparent`, COUNT(`id`) AS `jotcount` FROM {$this->DocLister->getTable('jot_content')} WHERE `published`=1 AND `deleted`=0 GROUP BY `uparent`) `jc` ON `jc`.`uparent` = {$this->DocLister->getPK()}";
         $this->DocLister->setFiltersJoin($join);
         $fields = $this->DocLister->getCFGDef('selectFields', 'c.*');
-        $this->DocLister->config->setConfig(array(
+        $this->DocLister->config->setConfig([
             "selectFields" => $fields . ",IFNULL(`jc`.`jotcount`,0) AS `jotcount`"
-        ));
+        ]);
 
         return true;
     }

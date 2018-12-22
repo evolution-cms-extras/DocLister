@@ -36,7 +36,7 @@ class site_contentDocLister extends DocLister
      * @param array $cfg
      * @param null $startTime
      */
-    public function __construct($modx, $cfg = array(), $startTime = null)
+    public function __construct($modx, $cfg = [], $startTime = null)
     {
         parent::__construct($modx, $cfg, $startTime);
         $this->extTV = $this->getExtender('tv', true, true);
@@ -79,7 +79,7 @@ class site_contentDocLister extends DocLister
         if ($tvlist != '' && count($this->_docs) > 0) {
             $tv = $this->extTV->getTVList(array_keys($this->_docs), $tvlist);
             if (!is_array($tv)) {
-                $tv = array();
+                $tv = [];
             }
             foreach ($tv as $docID => $TVitem) {
                 if (isset($this->_docs[$docID]) && is_array($this->_docs[$docID])) {
@@ -117,7 +117,7 @@ class site_contentDocLister extends DocLister
                  * @var $extUser user_DL_Extender
                  */
                 if ($extUser = $this->getExtender('user')) {
-                    $extUser->init($this, array('fields' => $this->getCFGDef("userFields", "")));
+                    $extUser->init($this, ['fields' => $this->getCFGDef("userFields", "")]);
                 }
 
                 /**
@@ -182,10 +182,10 @@ class site_contentDocLister extends DocLister
                     }
 
                     if ($extPrepare) {
-                        $item = $extPrepare->init($this, array(
+                        $item = $extPrepare->init($this, [
                             'data'      => $item,
                             'nameParam' => 'prepare'
-                        ));
+                        ]);
                         if ($item === false) {
                             $this->skippedDocs++;
                             continue;
@@ -222,9 +222,9 @@ class site_contentDocLister extends DocLister
      * @param array $array
      * @return string
      */
-    public function getJSON($data, $fields, $array = array())
+    public function getJSON($data, $fields, $array = [])
     {
-        $out = array();
+        $out = [];
         $fields = is_array($fields) ? $fields : explode(",", $fields);
         $date = $this->getCFGDef('dateSource', 'pub_date');
         /**
@@ -243,11 +243,11 @@ class site_contentDocLister extends DocLister
         $extE = $this->getExtender('e', true, true);
 
         foreach ($data as $num => $row) {
-            if ((array('1') == $fields || in_array('summary', $fields)) && $extSummary) {
+            if ((['1'] == $fields || in_array('summary', $fields)) && $extSummary) {
                 $row['summary'] = $this->getSummary($row, $extSummary, 'introtext', 'content');
             }
 
-            if (array('1') == $fields || in_array('date', $fields)) {
+            if (['1'] == $fields || in_array('date', $fields)) {
                 if (isset($row[$date])) {
                     if (!$row[$date] && $date == 'pub_date' && isset($row['createdon'])) {
                         $date = 'createdon';
@@ -263,12 +263,12 @@ class site_contentDocLister extends DocLister
                 }
             }
 
-            if (array('1') == $fields || in_array('title', $fields)) {
+            if (['1'] == $fields || in_array('title', $fields)) {
                 if (isset($row['pagetitle'])) {
                     $row['title'] = empty($row['menutitle']) ? $row['pagetitle'] : $row['menutitle'];
                 }
             }
-            if ((bool)$this->getCFGDef('makeUrl', 1) && (array('1') == $fields || in_array('url', $fields))
+            if ((bool)$this->getCFGDef('makeUrl', 1) && (['1'] == $fields || in_array('url', $fields))
             ) {
                 if (isset($row['type']) && $row['type'] == 'reference' && isset($row['content'])) {
                     $row['url'] = is_numeric($row['content']) ? $this->modx->makeUrl(
@@ -281,14 +281,14 @@ class site_contentDocLister extends DocLister
                     $row['url'] = $this->modx->makeUrl($row['id'], '', '', $this->getCFGDef('urlScheme', ''));
                 }
             }
-            if ($extE && $tmp = $extE->init($this, array('data' => $row))) {
+            if ($extE && $tmp = $extE->init($this, ['data' => $row])) {
                 if (is_array($tmp)) {
                     $row = $tmp;
                 }
             }
 
             if ($extPrepare) {
-                $row = $extPrepare->init($this, array('data' => $row));
+                $row = $extPrepare->init($this, ['data' => $row]);
                 if ($row === false) {
                     continue;
                 }
@@ -320,7 +320,7 @@ class site_contentDocLister extends DocLister
                 $where = sqlHelper::trimLogicalOp($where);
 
                 $where = "WHERE {$where}";
-                $whereArr = array();
+                $whereArr = [];
                 if (!$this->getCFGDef('showNoPublish', 0)) {
                     $whereArr[] = "c.deleted=0 AND c.published=1";
                 } else {
@@ -395,7 +395,7 @@ class site_contentDocLister extends DocLister
      */
     protected function getDocList()
     {
-        $out = array();
+        $out = [];
         $sanitarInIDs = $this->sanitarIn($this->IDs);
         if ($sanitarInIDs != "''" || $this->getCFGDef('ignoreEmpty', '0')) {
             $where = $this->getCFGDef('addWhereList', '');
@@ -452,7 +452,7 @@ class site_contentDocLister extends DocLister
      */
     public function getChildrenFolder($id)
     {
-        $out = array();
+        $out = [];
         $where = $this->getCFGDef('addWhereFolder', '');
         $where = sqlHelper::trimLogicalOp($where);
         if ($where != '') {
@@ -485,7 +485,7 @@ class site_contentDocLister extends DocLister
     {
         $out = $this->getExtender('tv', true, true)->injectSortByTV($table, $sort);
         if (!is_array($out) || empty($out)) {
-            $out = array($table, $sort);
+            $out = [$table, $sort];
         }
 
         return $out;
@@ -496,8 +496,8 @@ class site_contentDocLister extends DocLister
      */
     protected function getChildrenList()
     {
-        $where = array();
-        $out = array();
+        $where = [];
+        $out = [];
 
         $tmpWhere = $this->getCFGDef('addWhereList', '');
         $tmpWhere = sqlHelper::trimLogicalOp($tmpWhere);

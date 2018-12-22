@@ -125,7 +125,7 @@ abstract class autoTable extends MODxAPI
     public function delete($ids, $fire_events = false)
     {
         $_ids = $this->cleanIDs($ids, ',');
-        if (is_array($_ids) && $_ids !== array()) {
+        if (is_array($_ids) && $_ids !== []) {
             $id = $this->sanitarIn($_ids);
             if (! empty($id)) {
                 $this->query("DELETE from {$this->makeTable($this->table)} where `" . $this->pkName . "` IN ({$id})");
