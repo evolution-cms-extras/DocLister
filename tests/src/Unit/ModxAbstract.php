@@ -40,7 +40,7 @@ abstract class ModxAbstract extends TestAbstract
     protected function mockMODX(array $config = array())
     {
         $modx = $this->getMockBuilder('\DocumentParser')
-            ->setMethods(array('getFullTableName'))
+            ->setMethods(array('getFullTableName', 'getConfig', 'getDatabase'))
             ->getMock();
 
         $modx->expects($this->any())
@@ -112,6 +112,16 @@ abstract class ModxAbstract extends TestAbstract
                 'display_params' => ''
             )
         );
+
+        $modx->expects($this->any())
+            ->method('getConfig')
+            ->will($this->returnCallback(function($key) use($modx) {
+                return isset($modx->config[$key]) ? $modx->config[$key] : null;
+            }));
+
+        $modx->expects($this->any())
+            ->method('getDatabase')
+            ->will($this->returnValue($modx->db));
 
         return $modx;
 
