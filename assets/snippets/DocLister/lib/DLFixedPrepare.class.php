@@ -78,7 +78,7 @@ if (!class_exists("DLFixedPrepare", false)) {
                 $sanitarInIDs = $_DocLister->sanitarIn($_DocLister->getIDs());
                 $where = sqlHelper::trimLogicalOp($_DocLister->getCFGDef('addWhereList', ''));
                 $where = sqlHelper::trimLogicalOp(($where ? $where . ' AND ' : '') . $_DocLister->filtersWhere());
-                $where = sqlHelper::trimLogicalOp(($where ? $where . ' AND ' : '') . "SUBSTRING(c.pagetitle,1,1) = '" . $modx->db->escape($char) . "'");
+                $where = sqlHelper::trimLogicalOp(($where ? $where . ' AND ' : '') . "SUBSTRING(c.pagetitle,1,1) = '" . $modx->getDatabase()->escape($char) . "'");
 
                 if ($_DocLister->getCFGDef('idType', 'parents') == 'parents') {
 
@@ -109,7 +109,7 @@ if (!class_exists("DLFixedPrepare", false)) {
                 }
                 $q = $_DocLister->dbQuery("SELECT count(c.id) as total FROM " . $_DocLister->getTable('site_content',
                         'c') . " " . $where);
-                $total = $modx->db->getValue($q);
+                $total = $modx->getDatabase()->getValue($q);
                 $data['OnNewChar'] = $_DocLister->parseChunk($_DocLister->getCFGDef('tplOnNewChar'),
                     compact("char", "total"));
                 $_extDocLister->setStore('char', $char);

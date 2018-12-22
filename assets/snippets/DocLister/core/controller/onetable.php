@@ -255,7 +255,7 @@ class onetableDocLister extends DocLister
             $rs = $this->dbQuery("SELECT {$fields} FROM {$from} {$where} {$group} {$sort} {$limit}");
 
             $pk = $this->getPK(false);
-            while ($item = $this->modx->db->getRow($rs)) {
+            while ($item = $this->modx->getDatabase()->getRow($rs)) {
                 $out[$item[$pk]] = $item;
             }
         }
@@ -326,7 +326,7 @@ class onetableDocLister extends DocLister
 
             $pk = $this->getPK(false);
 
-            while ($item = $this->modx->db->getRow($rs)) {
+            while ($item = $this->modx->getDatabase()->getRow($rs)) {
                 $out[$item[$pk]] = $item;
             }
         }
@@ -392,7 +392,7 @@ class onetableDocLister extends DocLister
             $maxDocs = $this->getCFGDef('maxDocs', 0);
             $limit = $maxDocs > 0 ? $this->LimitSQL($this->getCFGDef('maxDocs', 0)) : '';
             $rs = $this->dbQuery("SELECT count(*) FROM (SELECT count(*) FROM {$from} {$where} {$group} {$limit}) as `tmp`");
-            $out = $this->modx->db->getValue($rs);
+            $out = $this->modx->getDatabase()->getValue($rs);
         }
 
         return $out;
@@ -415,7 +415,7 @@ class onetableDocLister extends DocLister
 
         $rs = $this->dbQuery("SELECT {$this->getPK()} FROM {$this->table} WHERE {$where}");
         $pk = $this->getPK(false);
-        while ($item = $this->modx->db->getRow($rs)) {
+        while ($item = $this->modx->getDatabase()->getRow($rs)) {
             $out[] = $item[$pk];
         }
 

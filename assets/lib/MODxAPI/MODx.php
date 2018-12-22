@@ -251,7 +251,7 @@ abstract class MODxAPI extends MODxAPIhelpers
             $this->addQuery($SQL);
         }
 
-        return empty($SQL) ? null : $this->modx->db->query($SQL);
+        return empty($SQL) ? null : $this->modx->getDatabase()->query($SQL);
     }
 
     /**
@@ -263,7 +263,7 @@ abstract class MODxAPI extends MODxAPIhelpers
         if (! is_scalar($value)) {
             $value = '';
         } else {
-            $value = $this->modx->db->escape($value);
+            $value = $this->modx->getDatabase()->escape($value);
         }
 
         return $value;
@@ -731,7 +731,7 @@ abstract class MODxAPI extends MODxAPIhelpers
 
         if ($where != '') {
             $sql = $this->query("SELECT `" . $this->escape($PK) . "` FROM " . $this->makeTable($table) . " WHERE " . $where);
-            $id = $this->modx->db->getValue($sql);
+            $id = $this->modx->getDatabase()->getValue($sql);
             $flag = (! $id || (! $this->newDoc && $id == $this->getID()));
         } else {
             $flag = false;

@@ -52,9 +52,9 @@ class Helper extends \APIhelpers
      */
     protected static function _counter($from, $where = '')
     {
-        $q = self::$modx->db->select('count(id)', self::$modx->getFullTableName($from), $where);
+        $q = self::$modx->getDatabase()->select('count(id)', self::$modx->getFullTableName($from), $where);
 
-        return self::$modx->db->getValue($q);
+        return self::$modx->getDatabase()->getValue($q);
     }
 
     /**

@@ -292,11 +292,11 @@ class DLTemplate
             $tpl = $this->modx->chunkCache[$name];
         } else {
             $table = $this->modx->getFullTableName('site_htmlsnippets');
-            $query = $this->modx->db->query(
-                "SELECT `snippet` FROM " . $table . " WHERE `name`='" . $this->modx->db->escape($name) . "' AND `disabled`=0"
+            $query = $this->modx->getDatabase()->query(
+                "SELECT `snippet` FROM " . $table . " WHERE `name`='" . $this->modx->getDatabase()->escape($name) . "' AND `disabled`=0"
             );
-            if ($this->modx->db->getRecordCount($query) == 1) {
-                $row = $this->modx->db->getRow($query);
+            if ($this->modx->getDatabase()->getRecordCount($query) == 1) {
+                $row = $this->modx->getDatabase()->getRow($query);
                 $tpl = $row['snippet'];
             } else {
                 $tpl = null;
@@ -367,7 +367,7 @@ class DLTemplate
         $tpl = null;
         $id = (int)$id;
         if ($id > 0) {
-            $tpl = $this->modx->db->getValue("SELECT `content` FROM {$this->modx->getFullTableName("site_templates")} WHERE `id` = {$id}");
+            $tpl = $this->modx->getDatabase()->getValue("SELECT `content` FROM {$this->modx->getFullTableName("site_templates")} WHERE `id` = {$id}");
         }
         if (is_null($tpl)) {
             $tpl = '[*content*]';

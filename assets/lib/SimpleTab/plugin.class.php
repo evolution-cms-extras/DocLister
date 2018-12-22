@@ -226,7 +226,7 @@ abstract class Plugin
     {
         $sql = "SHOW TABLES LIKE '{$this->_table}'";
 
-        return $this->modx->db->getRecordCount($this->modx->db->query($sql));
+        return $this->modx->getDatabase()->getRecordCount($this->modx->getDatabase()->query($sql));
     }
 
     /**
@@ -236,7 +236,7 @@ abstract class Plugin
     {
         $sql = '';
 
-        return $this->modx->db->query($sql);
+        return $this->modx->getDatabase()->query($sql);
     }
 
     /**
@@ -247,10 +247,10 @@ abstract class Plugin
     {
         $eventsTable = $this->modx->getFullTableName('system_eventnames');
         foreach ($events as $event) {
-            $result = $this->modx->db->select('`id`', $eventsTable, "`name` = '{$event}'");
-            if (! $this->modx->db->getRecordCount($result)) {
+            $result = $this->modx->getDatabase()->select('`id`', $eventsTable, "`name` = '{$event}'");
+            if (! $this->modx->getDatabase()->getRecordCount($result)) {
                 $sql = "INSERT INTO {$eventsTable} VALUES (NULL, '{$event}', '{$eventsType}', '{$this->pluginName} Events')";
-                if (! $this->modx->db->query($sql)) {
+                if (! $this->modx->getDatabase()->query($sql)) {
                     $this->modx->logEvent(0, 3, "Cannot register {$event} event.", $this->pluginName);
                 }
             }

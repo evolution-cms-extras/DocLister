@@ -31,11 +31,11 @@ if ($class !== 'DocLister' && file_exists($path) && !class_exists($class, false)
 }
 
 if (class_exists($class, false) && $class != 'DocLister') {
-    $DocLister = new $class($modx, $modx->Event->params, $_time);
+    $DocLister = new $class($modx, $modx->event->params, $_time);
     $data = $DocLister->getDocs();
-    $out = isset($modx->Event->params['api']) ? $DocLister->getJSON(
+    $out = isset($modx->event->params['api']) ? $DocLister->getJSON(
         $data,
-        $modx->Event->params['api']
+        $modx->event->params['api']
     ) : $DocLister->render();
     if (isset($_SESSION['usertype']) && $_SESSION['usertype'] == 'manager') {
         $debug = $DocLister->debug->showLog();
